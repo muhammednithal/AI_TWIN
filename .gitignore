@@ -1,0 +1,33 @@
+# -------- BACKEND (GO) --------
+backend/.env
+backend/.env.local
+backend/bin/
+backend/tmp/
+backend/vendor/
+backend/*.log
+
+# Go build cache & binaries
+*.exe
+*.dll
+*.so
+*.test
+*.out
+
+# -------- FRONTEND (REACT + VITE) --------
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+
+# -------- EDITOR DIRECTORIES --------
+.vscode/
+.idea/
+*.swp
+
+# -------- SYSTEM & GENERAL --------
+.DS_Store
+Thumbs.db
+
+# -------- ENV FILES (root-level) --------
+.env
+.env.local
