@@ -7,21 +7,18 @@ import (
 )
 
 func RegisterRoutes(r *gin.Engine) {
-
 	auth := handlers.NewAuthHandler()
-
-	// Public routes
 	r.POST("/auth/signup", auth.Register)
 	r.POST("/auth/login", auth.Login)
 
-	// Protected
 	api := r.Group("/api")
 	api.Use(middleware.AuthMiddleware())
+
 	api.GET("/me", auth.MeHandler)
 
-	// Personality endpoints
+	// Personality
 	ph := handlers.NewPersonalityHandler()
-	api.POST("/personality", ph.Create)
-	api.GET("/personality/:id", ph.Get)
+	api.POST("/personalities", ph.Create)
 	api.GET("/personalities", ph.List)
+	api.GET("/personalities/:id", ph.Get)
 }

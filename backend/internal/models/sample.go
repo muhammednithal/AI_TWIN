@@ -13,8 +13,8 @@ type Sample struct {
 
 	Text      string         `gorm:"type:text" json:"text"`
 	Source    string         `json:"source"`
-	VectorID  string         `json:"vector_id"`                   // used for vector DB later
-	Embedding datatypes.JSON `gorm:"type:jsonb" json:"embedding"` // embedding vector
+	VectorID  string         `json:"vector_id"`                   // will equal sample.ID.String()
+	Embedding datatypes.JSON `gorm:"type:jsonb" json:"embedding"` // JSON array of floats
 
 	CreatedAt time.Time `json:"created_at"`
 }

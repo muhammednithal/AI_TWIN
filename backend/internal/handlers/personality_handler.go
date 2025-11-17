@@ -14,9 +14,7 @@ type PersonalityHandler struct {
 }
 
 func NewPersonalityHandler() *PersonalityHandler {
-	return &PersonalityHandler{
-		svc: services.NewPersonalityService(),
-	}
+	return &PersonalityHandler{svc: services.NewPersonalityService()}
 }
 
 type CreateReq struct {
@@ -27,7 +25,7 @@ type CreateReq struct {
 	Samples      []struct {
 		Text   string `json:"text" binding:"required"`
 		Source string `json:"source"`
-	} `json:"samples" binding:"required"`
+	} `json:"samples" binding:"required,min=1"`
 }
 
 func (h *PersonalityHandler) Create(c *gin.Context) {
@@ -46,12 +44,11 @@ func (h *PersonalityHandler) Create(c *gin.Context) {
 		Sliders:      req.Sliders,
 		StyleSummary: req.StyleSummary,
 	}
-
-	for _, sm := range req.Samples {
-		input.Samples = append(input.Samples, services.SampleInput{
-			Text:   sm.Text,
-			Source: sm.Source,
-		})
+	for _, s := range req.Samples {
+		input.Samples = append(input.Samples, struct {
+			Text   string `json:"text"`
+			Source string `json:"source"`
+		}{Text: s.Text, Source: s.Source})
 	}
 
 	p, err := h.svc.CreatePersonality(input)
@@ -59,7 +56,6 @@ func (h *PersonalityHandler) Create(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(http.StatusCreated, gin.H{"personality": p})
 }
 
@@ -67,18 +63,18 @@ func (h *PersonalityHandler) Get(c *gin.Context) {
 	id := c.Param("id")
 	p, err := h.svc.PersonalityRepo().GetByID(id)
 	if err != nil {
-		c.JSON(404, gin.H{"error": "not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
 		return
 	}
-	c.JSON(200, gin.H{"personality": p})
+	c.JSON(http.StatusOK, gin.H{"personality": p})
 }
 
 func (h *PersonalityHandler) List(c *gin.Context) {
 	u := c.MustGet("current_user").(*models.User)
-	list, err := h.svc.PersonalityRepo().ListByUser(u.ID.String())
+	out, err := h.svc.PersonalityRepo().ListByUser(u.ID.String())
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(200, gin.H{"personalities": list})
+	c.JSON(http.StatusOK, gin.H{"personalities": out})
 }

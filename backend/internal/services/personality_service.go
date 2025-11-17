@@ -6,7 +6,8 @@ import (
 	"errors"
 	"os"
 
-	openai "github.com/sashabaranov/go-openai"
+	"github.com/google/generative-ai-go/genai"
+	"google.golang.org/api/option"
 
 	"github.com/muhammednithal/AI_TWIN/backend/internal/models"
 	"github.com/muhammednithal/AI_TWIN/backend/internal/repositories"
@@ -16,22 +17,22 @@ import (
 type PersonalityService struct {
 	personalityRepo *repositories.PersonalityRepository
 	sampleRepo      *repositories.SampleRepository
-	openaiClient    *openai.Client
-	embeddingModel  string
+	client          *genai.Client
 }
 
 func NewPersonalityService() *PersonalityService {
-	client := openai.NewClient(os.Getenv("OPENAI_API_KEY"))
-	model := os.Getenv("EMBEDDING_MODEL")
-	if model == "" {
-		model = "text-embedding-3-small"
+	ctx := context.Background()
+	apiKey := os.Getenv("GEMINI_API_KEY")
+
+	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey))
+	if err != nil {
+		panic(err)
 	}
 
 	return &PersonalityService{
 		personalityRepo: repositories.NewPersonalityRepository(),
 		sampleRepo:      repositories.NewSampleRepository(),
-		openaiClient:    client,
-		embeddingModel:  model,
+		client:          client,
 	}
 }
 
@@ -41,21 +42,18 @@ type CreatePersonalityInput struct {
 	Language     string             `json:"language"`
 	Sliders      map[string]float64 `json:"sliders"`
 	StyleSummary string             `json:"style_summary"`
-	Samples      []SampleInput      `json:"samples"`
-}
-
-type SampleInput struct {
-	Text   string `json:"text"`
-	Source string `json:"source"`
+	Samples      []struct {
+		Text   string `json:"text"`
+		Source string `json:"source"`
+	} `json:"samples"`
 }
 
 func (s *PersonalityService) CreatePersonality(input *CreatePersonalityInput) (*models.Personality, error) {
-
 	if len(input.Samples) == 0 {
-		return nil, errors.New("at least 1 sample required")
+		return nil, errors.New("at least one sample required")
 	}
 
-	// personality record
+	// create personality record
 	p := &models.Personality{
 		UserID:       utils.ParseUUID(input.UserID),
 		Name:         input.Name,
@@ -63,58 +61,46 @@ func (s *PersonalityService) CreatePersonality(input *CreatePersonalityInput) (*
 		StyleSummary: input.StyleSummary,
 	}
 
-	slidersJSON, _ := json.Marshal(input.Sliders)
-	p.SliderJSON = slidersJSON
+	if b, err := json.Marshal(input.Sliders); err == nil {
+		p.SliderJSON = b
+	}
 
-	// create personality
 	if err := s.personalityRepo.Create(p); err != nil {
 		return nil, err
 	}
 
-	// collect texts for bulk embedding
-	var texts []string
+	// --- INDIVIDUAL EMBEDDINGS WITH GEMINI (your SDK version) --- //
+	ctx := context.Background()
+
+	model := s.client.EmbeddingModel("text-embedding-004")
+
 	for _, sm := range input.Samples {
-		texts = append(texts, sm.Text)
-	}
+		// 1 sample → 1 embedding request
+		resp, err := model.EmbedContent(ctx, genai.Text(sm.Text))
+		if err != nil {
+			return nil, err
+		}
 
-	// bulk request
-	embedResp, err := s.openaiClient.CreateEmbeddings(
-		context.Background(),
-		openai.EmbeddingRequest{
-			Model: openai.EmbeddingModel(s.embeddingModel),
-			Input: texts,
-		},
-	)
+		// resp.Embedding is *ContentEmbedding
+		vec := resp.Embedding.Values // []float32
 
-	if err != nil {
-		return nil, err
-	}
-
-	// map each embedding to samples
-	for i, sm := range input.Samples {
-		vec := embedResp.Data[i].Embedding
-
-		vecJSON, _ := json.Marshal(vec)
+		embJSON, _ := json.Marshal(vec)
 
 		sample := &models.Sample{
 			PersonalityID: p.ID,
 			Text:          sm.Text,
 			Source:        sm.Source,
-			Embedding:     vecJSON,
+			Embedding:     embJSON,
 		}
 
 		if err := s.sampleRepo.Create(sample); err != nil {
 			return nil, err
 		}
 
-		// assign vector_id after sample has ID
 		sample.VectorID = sample.ID.String()
-		if err := s.sampleRepo.Update(sample); err != nil {
-			return nil, err
-		}
+		s.sampleRepo.Update(sample)
 	}
 
-	// return fully hydrated personality
 	return s.personalityRepo.GetByID(p.ID.String())
 }
 
