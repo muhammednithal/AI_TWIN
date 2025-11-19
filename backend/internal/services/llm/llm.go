@@ -3,11 +3,9 @@ package llm
 import (
 	"context"
 	"errors"
-	"os"
 	"strings"
 
 	"github.com/google/generative-ai-go/genai"
-	"google.golang.org/api/option"
 )
 
 // LLMClient: simple interface for chat generation.
@@ -16,29 +14,16 @@ type LLMClient interface {
 }
 
 type GeminiLLM struct {
-	client *genai.Client
-	model  *genai.GenerativeModel
+	model *genai.GenerativeModel
 }
 
-func NewGeminiLLM() (*GeminiLLM, error) {
-	apiKey := os.Getenv("GEMINI_API_KEY")
-	if apiKey == "" {
-		return nil, errors.New("GEMINI_API_KEY required")
-	}
+func NewGeminiLLM(client *genai.Client) (*GeminiLLM, error) {
 
-	ctx := context.Background()
-
-	client, err := genai.NewClient(ctx, option.WithAPIKey(apiKey))
-	if err != nil {
-		return nil, err
-	}
-
-	// Using 1.5 Flash or 1.5 Pro — your choice:
 	model := client.GenerativeModel("models/gemini-flash-latest")
 
 	return &GeminiLLM{
-		client: client,
-		model:  model,
+		// client: client,
+		model: model,
 	}, nil
 }
 

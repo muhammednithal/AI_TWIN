@@ -38,8 +38,8 @@ func NewChatService() *ChatService {
 		panic(err)
 	}
 
-	// LLM client (NO arguments)
-	llmClient, err := llm.NewGeminiLLM()
+	// LLM client for chat generation
+	llmClient, err := llm.NewGeminiLLM(genaiClient)
 	if err != nil {
 		panic("failed to create LLM client: " + err.Error())
 	}
