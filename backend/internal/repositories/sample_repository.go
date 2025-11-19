@@ -21,3 +21,12 @@ func (r *SampleRepository) Create(s *models.Sample) error {
 func (r *SampleRepository) Update(s *models.Sample) error {
 	return r.db.Save(s).Error
 }
+
+// ListByPersonality returns all samples for a given personality id.
+func (r *SampleRepository) ListByPersonality(personalityID string) ([]models.Sample, error) {
+	var samples []models.Sample
+	if err := r.db.Where("personality_id = ?", personalityID).Find(&samples).Error; err != nil {
+		return nil, err
+	}
+	return samples, nil
+}

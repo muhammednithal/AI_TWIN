@@ -21,4 +21,8 @@ func RegisterRoutes(r *gin.Engine) {
 	api.POST("/personalities", ph.Create)
 	api.GET("/personalities", ph.List)
 	api.GET("/personalities/:id", ph.Get)
+	// Chat
+	ch := handlers.NewChatHandler()
+	api.POST("/chat", ch.Send)
+
 }

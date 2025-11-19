@@ -6,11 +6,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/muhammednithal/AI_TWIN/backend/internal/repositories"
-	"github.com/muhammednithal/AI_TWIN/backend/internal/services"
+	"github.com/muhammednithal/AI_TWIN/backend/internal/services/auth"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
-	auth := services.NewAuthService()
+	auth := auth.NewAuthService()
 	userRepo := repositories.NewUserRepository()
 
 	return func(c *gin.Context) {

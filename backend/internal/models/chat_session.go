@@ -7,13 +7,12 @@ import (
 )
 
 type ChatSession struct {
-	ID            uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
-	PersonalityID uuid.UUID
-	Personality   Personality `gorm:"foreignKey:PersonalityID;constraint:OnDelete:CASCADE"`
+	ID            uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primaryKey" json:"id"`
+	PersonalityID uuid.UUID `gorm:"type:uuid;not null" json:"personality_id"`
+	UserID        uuid.UUID `gorm:"type:uuid;not null" json:"user_id"`
 
-	UserID uuid.UUID
-	User   User `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE"`
+	Messages []Message `gorm:"foreignKey:SessionID" json:"messages"`
 
-	Title     string
-	CreatedAt time.Time
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }

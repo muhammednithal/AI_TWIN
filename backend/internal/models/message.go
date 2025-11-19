@@ -4,16 +4,15 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"gorm.io/datatypes"
 )
 
 type Message struct {
-	ID        uuid.UUID   `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
-	SessionID uuid.UUID   `gorm:"type:uuid;not null"`
-	Session   ChatSession `gorm:"foreignKey:SessionID;constraint:OnDelete:CASCADE"`
+	ID        uuid.UUID      `gorm:"type:uuid;default:gen_random_uuid();primaryKey" json:"id"`
+	SessionID uuid.UUID      `gorm:"type:uuid;not null" json:"session_id"`
+	FromUser  bool           `json:"from_user"`
+	Content   string         `gorm:"type:text" json:"content"`
+	Metadata  datatypes.JSON `gorm:"type:jsonb" json:"metadata"`
 
-	FromUser bool
-	Content  string
-	Meta     string `gorm:"type:jsonb"`
-
-	CreatedAt time.Time
+	CreatedAt time.Time `json:"created_at"`
 }

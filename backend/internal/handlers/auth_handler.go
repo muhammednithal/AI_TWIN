@@ -2,16 +2,16 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/muhammednithal/AI_TWIN/backend/internal/services"
+	"github.com/muhammednithal/AI_TWIN/backend/internal/services/auth"
 )
 
 type AuthHandler struct {
-	svc *services.AuthService
+	svc *auth.AuthService
 }
 
 func NewAuthHandler() *AuthHandler {
 	return &AuthHandler{
-		svc: services.NewAuthService(),
+		svc: auth.NewAuthService(),
 	}
 }
 

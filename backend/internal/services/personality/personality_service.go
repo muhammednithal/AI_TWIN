@@ -1,4 +1,4 @@
-package services
+package personality
 
 import (
 	"context"
@@ -69,7 +69,7 @@ func (s *PersonalityService) CreatePersonality(input *CreatePersonalityInput) (*
 		return nil, err
 	}
 
-	// --- INDIVIDUAL EMBEDDINGS WITH GEMINI (your SDK version) --- //
+	// --- INDIVIDUAL EMBEDDINGS WITH GEMINI  //
 	ctx := context.Background()
 
 	model := s.client.EmbeddingModel("text-embedding-004")

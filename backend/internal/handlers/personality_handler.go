@@ -6,15 +6,15 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/muhammednithal/AI_TWIN/backend/internal/models"
-	"github.com/muhammednithal/AI_TWIN/backend/internal/services"
+	"github.com/muhammednithal/AI_TWIN/backend/internal/services/personality"
 )
 
 type PersonalityHandler struct {
-	svc *services.PersonalityService
+	svc *personality.PersonalityService
 }
 
 func NewPersonalityHandler() *PersonalityHandler {
-	return &PersonalityHandler{svc: services.NewPersonalityService()}
+	return &PersonalityHandler{svc: personality.NewPersonalityService()}
 }
 
 type CreateReq struct {
@@ -37,7 +37,7 @@ func (h *PersonalityHandler) Create(c *gin.Context) {
 		return
 	}
 
-	input := &services.CreatePersonalityInput{
+	input := &personality.CreatePersonalityInput{
 		UserID:       u.ID.String(),
 		Name:         req.Name,
 		Language:     req.Language,
