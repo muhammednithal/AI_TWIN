@@ -7,13 +7,10 @@ import (
 )
 
 type Memory struct {
-	ID            uuid.UUID   `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
-	PersonalityID uuid.UUID   `gorm:"type:uuid;not null"`
-	Personality   Personality `gorm:"foreignKey:PersonalityID;constraint:OnDelete:CASCADE"`
-
-	Content  string
-	Tags     []string `gorm:"type:text[]"`
-	VectorID string
-
-	CreatedAt time.Time
+	ID            uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primaryKey"`
+	PersonalityID uuid.UUID `gorm:"type:uuid"`
+	Content       string    `gorm:"type:text"`
+	Tags          string    `gorm:"type:text"` // comma separated tags
+	Embedding     []byte    `gorm:"type:bytea"`
+	CreatedAt     time.Time
 }

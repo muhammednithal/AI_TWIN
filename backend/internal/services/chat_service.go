@@ -9,6 +9,7 @@ import (
 	"github.com/muhammednithal/AI_TWIN/backend/internal/models"
 	"github.com/muhammednithal/AI_TWIN/backend/internal/repositories"
 	"github.com/muhammednithal/AI_TWIN/backend/internal/services/llm"
+	"github.com/muhammednithal/AI_TWIN/backend/internal/services/memory"
 	"github.com/muhammednithal/AI_TWIN/backend/internal/services/prompt"
 	"github.com/muhammednithal/AI_TWIN/backend/internal/services/rag"
 	"github.com/muhammednithal/AI_TWIN/backend/pkg/utils"
@@ -51,6 +52,7 @@ func NewChatService() *ChatService {
 
 		ragSvc: rag.NewRAGService(
 			repositories.NewSampleRepository(),
+			repositories.NewMemoryRepository(),
 			genaiClient,
 		),
 
@@ -156,7 +158,13 @@ func (s *ChatService) SendMessage(ctx context.Context, req *ChatRequest) (*ChatR
 		CreatedAt: time.Now(),
 	}
 	_ = s.messageRepo.Create(assistantMsg)
-
+	// ----------------------------------------------------
+	// 8.5) Auto Memory Extraction (asynchronous)
+	// ----------------------------------------------------
+	go func() {
+		extractor := memory.NewAutoMemoryExtractor()
+		_ = extractor.ExtractAndSave(req.PersonalityID, req.Message, reply)
+	}()
 	// ----------------------------------------------------
 	// 9) Return response
 	// ----------------------------------------------------

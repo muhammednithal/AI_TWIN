@@ -25,4 +25,10 @@ func RegisterRoutes(r *gin.Engine) {
 	ch := handlers.NewChatHandler()
 	api.POST("/chat", ch.Send)
 
+	mh := handlers.NewMemoryHandler()
+
+	api.POST("/memory", mh.Create)
+	api.GET("/memory/:personality_id", mh.List)
+	api.DELETE("/memory/:id", mh.Delete)
+
 }
