@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  @apply min-h-screen h-full antialiased;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+/* Theme handling via body[data-theme] */
+
+body[data-theme="dark"] {
+  @apply bg-gradient-to-br from-slate-950 via-slate-900 to-black text-slate-100;
+}
+
+body[data-theme="light"] {
+  @apply bg-slate-100 text-slate-900;
+}
