@@ -72,7 +72,7 @@ func (s *PersonalityService) CreatePersonality(input *CreatePersonalityInput) (*
 	// --- INDIVIDUAL EMBEDDINGS WITH GEMINI  //
 	ctx := context.Background()
 
-	model := s.client.EmbeddingModel("text-embedding-004")
+	model := s.client.EmbeddingModel("gemini-embedding-001")
 
 	for _, sm := range input.Samples {
 		// 1 sample → 1 embedding request

@@ -32,45 +32,60 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-slate-900/70 border border-slate-700/50 backdrop-blur-xl p-8 rounded-2xl shadow-2xl shadow-black/60">
-        <h1 className="text-2xl font-semibold text-center mb-6">
-          Create Account
-        </h1>
+    <div className="relative min-h-[calc(100vh-3.5rem)] flex items-center justify-center px-4 overflow-hidden">
+      {/* Background blobs */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-600/20 rounded-full mix-blend-screen filter blur-3xl animate-blob animation-delay-2000"></div>
 
-        <form className="space-y-5" onSubmit={handleSignup}>
-          {error && <p className="text-sm text-red-400">{error}</p>}
+      <div className="w-full max-w-md glass-panel p-8 rounded-3xl relative z-10 animate-fade-in-up">
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-emerald-500/10 rounded-3xl"></div>
+        <div className="relative">
+          <div className="flex justify-center mb-6">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-emerald-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-indigo-500/30">
+              T
+            </div>
+          </div>
+          <h1 className="text-3xl font-extrabold text-center mb-8 tracking-tight">
+            Create <span className="text-gradient">Account</span>
+          </h1>
 
-          <input
-            type="email"
-            className="w-full px-4 py-2 bg-slate-950/60 border border-slate-800 rounded-lg text-sm"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <form className="space-y-5" onSubmit={handleSignup}>
+            {error && <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 p-3 rounded-xl">{error}</p>}
 
-          <input
-            type="password"
-            className="w-full px-4 py-2 bg-slate-950/60 border border-slate-800 rounded-lg text-sm"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+            <div>
+              <input
+                type="email"
+                className="w-full px-5 py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-sm placeholder:text-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all duration-300 backdrop-blur-sm"
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
 
-          <button
-            className="w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 font-semibold text-sm"
-            disabled={loading}
-          >
-            {loading ? "Creating..." : "Sign Up"}
-          </button>
-        </form>
+            <div>
+              <input
+                type="password"
+                className="w-full px-5 py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-sm placeholder:text-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all duration-300 backdrop-blur-sm"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
 
-        <p className="text-center text-sm text-slate-400 mt-6">
-          Already have an account?{" "}
-          <Link to="/login" className="text-indigo-400 hover:underline">
-            Login
-          </Link>
-        </p>
+            <button
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-emerald-500 hover:from-indigo-500 hover:to-emerald-400 shadow-lg shadow-emerald-500/30 text-white font-semibold transition-all duration-300 hover:scale-[1.02]"
+              disabled={loading}
+            >
+              {loading ? "Creating..." : "Sign Up"}
+            </button>
+          </form>
+
+          <p className="text-center text-sm text-slate-400 mt-8">
+            Already have an account?{" "}
+            <Link to="/login" className="text-indigo-400 font-medium hover:text-indigo-300 transition-colors">
+              Sign In
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

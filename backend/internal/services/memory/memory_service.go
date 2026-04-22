@@ -42,7 +42,7 @@ type CreateMemoryRequest struct {
 func (s *MemoryService) Create(req CreateMemoryRequest) (*models.Memory, error) {
 
 	// Embed using Gemini
-	model := s.client.EmbeddingModel("text-embedding-004")
+	model := s.client.EmbeddingModel("gemini-embedding-001")
 
 	resp, err := model.EmbedContent(context.Background(), genai.Text(req.Content))
 	if err != nil {

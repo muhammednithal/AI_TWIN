@@ -68,84 +68,112 @@ export default function Memory() {
 
   if (!personalityId) {
     return (
-      <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center">
-        <p className="text-sm text-slate-300">
-          No personality found. Create your twin first.
-        </p>
+      <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center animate-fade-in-up">
+        <div className="glass-panel p-8 rounded-3xl text-center max-w-md">
+          <div className="w-16 h-16 mx-auto bg-indigo-500/20 text-indigo-400 rounded-full flex items-center justify-center text-2xl mb-4">
+            ⚠️
+          </div>
+          <h2 className="text-xl font-bold text-slate-100 mb-2">No Personality Found</h2>
+          <p className="text-sm text-slate-400">
+            You need to create your AI twin's personality before adding memories.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center px-4">
-      <div className="w-full max-w-4xl bg-slate-950/60 border border-slate-800 rounded-2xl p-6 shadow-2xl shadow-black/60 backdrop-blur-xl">
-        <div className="flex items-center justify-between mb-4">
+    <div className="relative min-h-[calc(100vh-3.5rem)] flex items-center justify-center px-4 py-8 overflow-hidden">
+      {/* Background blobs */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600/10 rounded-full mix-blend-screen filter blur-3xl animate-blob"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full mix-blend-screen filter blur-3xl animate-blob animation-delay-2000"></div>
+
+      <div className="w-full max-w-4xl glass-panel rounded-3xl p-6 md:p-8 lg:p-10 relative z-10 animate-fade-in-up">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 border-b border-white/10 pb-6">
           <div>
-            <h1 className="text-lg font-semibold text-slate-100">
-              Memories 🧠
+            <h1 className="text-3xl font-extrabold text-slate-100 tracking-tight mb-2 flex items-center gap-3">
+              Memories <span className="text-3xl">🧠</span>
             </h1>
-            <p className="text-xs text-slate-400">
-              These are facts, preferences and details your twin can recall.
+            <p className="text-sm text-slate-300">
+              Build your twin's knowledge base. These are facts, preferences, and details they can recall during chat.
             </p>
           </div>
           <button
             onClick={fetchMemories}
-            className="text-xs px-3 py-1 rounded border border-slate-700 text-slate-200 hover:border-indigo-400"
+            className="self-start md:self-auto text-sm px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors flex items-center gap-2 border border-slate-700 hover:border-slate-500"
           >
+            <span className={loading ? "animate-spin" : ""}>↻</span>
             Refresh
           </button>
         </div>
 
-        <form onSubmit={handleAdd} className="space-y-3 mb-6">
+        <form onSubmit={handleAdd} className="space-y-4 mb-8 bg-slate-900/40 p-6 rounded-2xl border border-white/5 backdrop-blur-md">
           {error && (
-            <p className="text-xs text-red-400 bg-red-950/40 border border-red-800/60 rounded px-3 py-2">
+            <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 animate-fade-in-up">
               {error}
             </p>
           )}
 
-          <textarea
-            className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-slate-100 focus:border-indigo-500 focus:ring-1 outline-none"
-            rows={2}
-            placeholder="Add something your twin should remember (e.g. I love pizza, I'm learning Go)..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
+          <div>
+            <label className="block text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wide">New Memory</label>
+            <textarea
+              className="w-full px-4 py-3 bg-slate-900/60 border border-slate-700/50 rounded-xl text-sm text-slate-100 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all resize-none placeholder:text-slate-500"
+              rows={3}
+              placeholder="e.g. I love dark roast coffee in the morning, and I'm currently learning Rust."
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
+          </div>
 
-          <input
-            className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-slate-100 focus:border-indigo-500 focus:ring-1 outline-none"
-            placeholder="Tags (comma separated, e.g. coffee,food)"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-          />
-
-          <button
-            type="submit"
-            disabled={adding}
-            className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white disabled:opacity-50"
-          >
-            {adding ? "Saving..." : "Add Memory"}
-          </button>
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wide">Tags</label>
+              <input
+                className="w-full px-4 py-3 bg-slate-900/60 border border-slate-700/50 rounded-xl text-sm text-slate-100 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all placeholder:text-slate-500"
+                placeholder="Comma separated (e.g. coffee, food, code)"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+              />
+            </div>
+            <div className="flex items-end">
+              <button
+                type="submit"
+                disabled={adding}
+                className="w-full md:w-auto px-8 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-sky-500 hover:from-indigo-500 hover:to-sky-400 text-sm font-bold text-white shadow-lg shadow-indigo-500/30 disabled:opacity-50 transition-all hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
+              >
+                {adding ? "Saving..." : "Add Memory +"}
+              </button>
+            </div>
+          </div>
         </form>
 
-        <div className="space-y-3 max-h-80 overflow-y-auto">
+        <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar relative">
           {loading && (
-            <p className="text-xs text-slate-400">Loading memories…</p>
+            <div className="flex justify-center py-10">
+              <div className="flex space-x-2">
+                <div className="w-3 h-3 bg-indigo-500 rounded-full animate-bounce"></div>
+                <div className="w-3 h-3 bg-indigo-500 rounded-full animate-bounce delay-150"></div>
+                <div className="w-3 h-3 bg-indigo-500 rounded-full animate-bounce delay-300"></div>
+              </div>
+            </div>
           )}
+          
           {!loading && memories.length === 0 && (
-            <p className="text-xs text-slate-500">
-              No memories yet. Chat with your twin or add some manually!
-            </p>
+            <div className="text-center py-12 border-2 border-dashed border-slate-800 rounded-2xl">
+              <p className="text-slate-400">No memories yet.</p>
+              <p className="text-sm text-slate-500 mt-1">Chat with your twin or add some manually!</p>
+            </div>
           )}
 
           {memories.map((m) => (
             <div
               key={m.id}
-              className="bg-slate-900/80 border border-slate-800 rounded-lg px-3 py-2 text-xs flex items-start justify-between gap-3"
+              className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:bg-white/10 transition-colors group flex flex-col md:flex-row gap-4 items-start md:items-center justify-between animate-fade-in-up"
             >
-              <div>
-                <p className="text-slate-100">{m.content}</p>
+              <div className="flex-1">
+                <p className="text-slate-200 text-sm leading-relaxed">{m.content}</p>
                 {m.tags && (
-                  <div className="flex flex-wrap gap-1 mt-2">
+                  <div className="flex flex-wrap gap-2 mt-3">
                     {m.tags
                       .split(",")
                       .map((t) => t.trim())
@@ -153,7 +181,7 @@ export default function Memory() {
                       .map((t, idx) => (
                         <span
                           key={idx}
-                          className="px-2 py-0.5 rounded-full bg-slate-800 text-[10px] text-slate-300"
+                          className="px-2.5 py-1 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-xs font-medium text-indigo-300"
                         >
                           #{t}
                         </span>
@@ -163,7 +191,7 @@ export default function Memory() {
               </div>
               <button
                 onClick={() => handleDelete(m.id)}
-                className="text-[10px] text-red-400 hover:text-red-300"
+                className="opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity text-sm px-3 py-1.5 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-transparent hover:border-red-500/30 whitespace-nowrap"
               >
                 Delete
               </button>

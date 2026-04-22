@@ -78,7 +78,7 @@ Assistant replied: "` + assistantReply + `"
 }
 
 func (e *AutoMemoryExtractor) saveMemory(personalityID string, text string) error {
-	model := e.client.EmbeddingModel("text-embedding-004")
+	model := e.client.EmbeddingModel("gemini-embedding-001")
 
 	resp, err := model.EmbedContent(context.Background(), genai.Text(text))
 	if err != nil {

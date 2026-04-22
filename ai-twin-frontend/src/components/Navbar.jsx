@@ -34,46 +34,53 @@ export default function Navbar() {
     location.pathname === path ? "text-indigo-400" : "text-slate-300";
 
   return (
-    <nav className="h-14 bg-slate-950/90 border-b border-slate-800 px-6 flex items-center justify-between backdrop-blur-md sticky top-0 z-20">
-      <div className="flex items-center gap-6 text-sm">
-        <Link className={`hover:text-indigo-400 ${isActive("/")}`} to="/">
+    <nav className="h-16 glass-panel border-b border-white/10 px-6 lg:px-10 flex items-center justify-between sticky top-0 z-50 backdrop-blur-xl bg-slate-950/60">
+      <div className="flex items-center gap-8 text-sm font-medium">
+        <Link 
+          className={`relative group px-1 py-2 transition-colors ${location.pathname === "/" ? "text-indigo-400" : "text-slate-300 hover:text-indigo-300"}`} 
+          to="/"
+        >
           Home
+          <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-indigo-500 transform origin-left transition-transform duration-300 ${location.pathname === "/" ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}></span>
         </Link>
         {token && (
           <>
             <Link
-              className={`hover:text-indigo-400 ${isActive("/chat")}`}
+              className={`relative group px-1 py-2 transition-colors ${location.pathname === "/chat" ? "text-indigo-400" : "text-slate-300 hover:text-indigo-300"}`}
               to="/chat"
             >
               Chat
+              <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-indigo-500 transform origin-left transition-transform duration-300 ${location.pathname === "/chat" ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}></span>
             </Link>
             <Link
-              className={`hover:text-indigo-400 ${isActive("/memory")}`}
+              className={`relative group px-1 py-2 transition-colors ${location.pathname === "/memory" ? "text-indigo-400" : "text-slate-300 hover:text-indigo-300"}`}
               to="/memory"
             >
               Memory
+              <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-indigo-500 transform origin-left transition-transform duration-300 ${location.pathname === "/memory" ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}></span>
             </Link>
             <Link
-              className={`hover:text-indigo-400 ${isActive("/profile")}`}
+              className={`relative group px-1 py-2 transition-colors ${location.pathname === "/profile" ? "text-indigo-400" : "text-slate-300 hover:text-indigo-300"}`}
               to="/profile"
             >
               Profile
+              <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-indigo-500 transform origin-left transition-transform duration-300 ${location.pathname === "/profile" ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}`}></span>
             </Link>
           </>
         )}
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4">
         <button
           onClick={toggleTheme}
-          className="text-xs px-3 py-1 rounded-md border border-slate-600 text-slate-200 hover:border-indigo-400 hover:text-indigo-300"
+          className="text-xs font-medium px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-slate-200 hover:bg-white/10 hover:border-indigo-400/50 hover:text-indigo-300 transition-all shadow-lg"
         >
           {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
         </button>
         {token && (
           <button
             onClick={logout}
-            className="text-xs px-3 py-1 rounded-md border border-red-500/50 text-red-300 hover:bg-red-500/10"
+            className="text-xs font-medium px-4 py-2 rounded-lg border border-red-500/30 text-red-400 bg-red-500/10 hover:bg-red-500/20 hover:border-red-500/50 transition-all shadow-lg shadow-red-500/10"
           >
             Logout
           </button>

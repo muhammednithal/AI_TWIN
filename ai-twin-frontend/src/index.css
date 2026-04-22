@@ -7,14 +7,38 @@ body,
 #root {
   @apply min-h-screen h-full antialiased;
   font-family: "Inter", system-ui, sans-serif;
+  overflow-x: hidden;
 }
 
 /* Theme handling via body[data-theme] */
 
 body[data-theme="dark"] {
-  @apply bg-gradient-to-br from-slate-950 via-slate-900 to-black text-slate-100;
+  @apply bg-slate-950 text-slate-100;
+  /* Premium deep dark mode */
+  background: radial-gradient(circle at 50% -20%, #1e1b4b 0%, #020617 50%, #000000 100%);
+  background-attachment: fixed;
 }
 
 body[data-theme="light"] {
-  @apply bg-slate-100 text-slate-900;
+  @apply bg-slate-50 text-slate-900;
+  background: radial-gradient(circle at 50% -20%, #e0e7ff 0%, #f8fafc 50%, #f1f5f9 100%);
+  background-attachment: fixed;
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/5 border border-white/10 backdrop-blur-xl shadow-xl;
+  }
+  
+  body[data-theme="light"] .glass-panel {
+    @apply bg-white/70 border-white/40 shadow-slate-200/50;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-sky-400 to-emerald-400;
+  }
+  
+  body[data-theme="light"] .text-gradient {
+    @apply from-indigo-600 via-sky-600 to-emerald-600;
+  }
 }

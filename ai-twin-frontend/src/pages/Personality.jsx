@@ -91,58 +91,73 @@ export default function Personality() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-3.5rem)] flex items-center justify-center px-4">
-      <div className="w-full max-w-5xl grid md:grid-cols-2 gap-10 bg-slate-950/60 border border-slate-800/70 rounded-2xl p-8 shadow-2xl shadow-black/60 backdrop-blur-xl">
+    <div className="relative min-h-[calc(100vh-3.5rem)] flex items-center justify-center px-4 py-8 overflow-hidden">
+      {/* Background blobs */}
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full mix-blend-screen filter blur-3xl animate-blob"></div>
+      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full mix-blend-screen filter blur-3xl animate-blob animation-delay-4000"></div>
+
+      <div className="w-full max-w-5xl grid md:grid-cols-2 gap-10 lg:gap-16 glass-panel rounded-3xl p-8 lg:p-12 relative z-10 animate-fade-in-up">
         {/* LEFT DESCRIPTION */}
-        <div className="space-y-5">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/80 border border-slate-700 text-xs uppercase tracking-wide text-slate-300">
+        <div className="space-y-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs uppercase tracking-wider text-slate-300 backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Step 1 · Personality</span>
+            <span className="font-medium">Step 1 · Personality</span>
           </div>
 
-          <h1 className="text-3xl font-bold">
+          <h1 className="text-4xl lg:text-5xl font-extrabold tracking-tight">
             Shape your{" "}
-            <span className="bg-gradient-to-r from-indigo-400 via-sky-400 to-emerald-400 bg-clip-text text-transparent">
+            <span className="text-gradient">
               AI Twin
             </span>
             .
           </h1>
 
-          <p className="text-sm text-slate-300">
+          <p className="text-base text-slate-300 leading-relaxed">
             Provide a name, language & a few text samples. We embed your tone,
-            generate a personality profile, and your twin learns to speak like
+            generate a personality profile, and your twin learns to speak just like
             you.
           </p>
 
-          <ul className="text-xs text-slate-400 space-y-1">
-            <li>• Paste real messages, chats, or posts.</li>
-            <li>• Use sliders to control humor, formality, emotion.</li>
-            <li>• You can improve personality later.</li>
-          </ul>
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-sm">
+            <ul className="text-sm text-slate-300 space-y-3">
+              <li className="flex items-start gap-3">
+                <span className="text-indigo-400 mt-0.5">✦</span>
+                <span>Paste real messages, chats, or social media posts.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-indigo-400 mt-0.5">✦</span>
+                <span>Use sliders to control humor, formality, and emotion.</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-indigo-400 mt-0.5">✦</span>
+                <span>You can always adjust and improve the personality later.</span>
+              </li>
+            </ul>
+          </div>
         </div>
 
         {/* RIGHT FORM */}
-        <div>
-          <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-6 lg:p-8 backdrop-blur-md">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <p className="text-sm text-red-400 bg-red-950/40 border border-red-800/50 rounded-lg px-3 py-2">
-                {error}
-              </p>
+              <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 animate-fade-in-up">
+                <p className="text-sm text-red-400">{error}</p>
+              </div>
             )}
             {success && (
-              <p className="text-sm text-emerald-300 bg-emerald-950/40 border border-emerald-700/50 rounded-lg px-3 py-2">
-                {success}
-              </p>
+              <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 animate-fade-in-up">
+                <p className="text-sm text-emerald-400">{success}</p>
+              </div>
             )}
 
             {/* Name */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-sm font-semibold text-slate-200 mb-2">
                 Twin Name
               </label>
               <input
                 type="text"
-                className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-sm text-slate-100 focus:border-indigo-500 focus:ring-1 outline-none"
+                className="w-full px-4 py-3 rounded-xl bg-slate-900/60 border border-slate-700/50 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
                 placeholder="e.g. Future You"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -151,11 +166,11 @@ export default function Personality() {
 
             {/* Language */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-sm font-semibold text-slate-200 mb-2">
                 Language
               </label>
               <select
-                className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-sm text-slate-100 focus:border-indigo-500"
+                className="w-full px-4 py-3 rounded-xl bg-slate-900/60 border border-slate-700/50 text-sm text-slate-100 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
               >
@@ -167,25 +182,25 @@ export default function Personality() {
             </div>
 
             {/* Samples */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <label className="block text-xs font-semibold text-slate-300">
+                <label className="block text-sm font-semibold text-slate-200">
                   Text Samples (min 3)
                 </label>
                 <button
                   type="button"
-                  className="text-[11px] text-indigo-400 hover:text-indigo-300"
+                  className="text-xs font-medium text-indigo-400 hover:text-indigo-300 transition-colors bg-indigo-500/10 px-3 py-1 rounded-lg"
                   onClick={addSampleField}
                 >
-                  + Add sample
+                  + Add Sample
                 </button>
               </div>
 
-              <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+              <div className="space-y-3 max-h-[220px] overflow-y-auto pr-2 custom-scrollbar">
                 {samples.map((s, idx) => (
                   <textarea
                     key={idx}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-100 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
+                    className="w-full px-4 py-3 rounded-xl bg-slate-900/60 border border-slate-700/50 text-sm text-slate-100 placeholder:text-slate-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all resize-none"
                     rows={2}
                     placeholder={`Sample #${idx + 1}`}
                     value={s}
@@ -196,7 +211,7 @@ export default function Personality() {
             </div>
 
             {/* Sliders */}
-            <div className="grid grid-cols-3 gap-3 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
               <SliderField
                 label="Humor"
                 value={sliders.humor}
@@ -218,7 +233,7 @@ export default function Personality() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-sm font-semibold shadow-md shadow-indigo-500/40 disabled:opacity-50"
+              className="w-full mt-6 py-4 rounded-xl bg-gradient-to-r from-indigo-600 to-sky-500 hover:from-indigo-500 hover:to-sky-400 text-sm font-bold text-white shadow-lg shadow-indigo-500/30 disabled:opacity-50 transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               {loading ? "Creating your twin..." : "Create My Twin 🤖"}
             </button>
@@ -231,17 +246,17 @@ export default function Personality() {
 
 function SliderField({ label, value, onChange }) {
   return (
-    <div className="bg-slate-950/60 border border-slate-800 rounded-xl px-3 py-2">
-      <div className="flex items-center justify-between mb-1">
-        <span className="text-slate-300">{label}</span>
-        <span className="text-slate-400 font-semibold">{value}/10</span>
+    <div className="bg-slate-900/50 border border-slate-700/50 rounded-xl px-4 py-3 backdrop-blur-sm">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs font-medium text-slate-300">{label}</span>
+        <span className="text-xs font-bold text-indigo-400">{value}/10</span>
       </div>
       <input
         type="range"
         min={0}
         max={10}
         value={value}
-        className="w-full accent-indigo-500"
+        className="w-full accent-indigo-500 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer"
         onChange={(e) => onChange(e.target.value)}
       />
     </div>

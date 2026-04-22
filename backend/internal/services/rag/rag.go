@@ -37,7 +37,7 @@ func NewRAGService(sampleRepo *repositories.SampleRepository, memoryRepo *reposi
 // embedQuery embeds a single text using Gemini.
 func (r *RAGService) embedQuery(text string) ([]float32, error) {
 	ctx := context.Background()
-	model := r.Client.EmbeddingModel("text-embedding-004")
+	model := r.Client.EmbeddingModel("gemini-embedding-001")
 
 	resp, err := model.EmbedContent(ctx, genai.Text(text))
 	if err != nil {
