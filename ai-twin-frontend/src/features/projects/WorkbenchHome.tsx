@@ -35,8 +35,8 @@ export function WorkbenchHome() {
     <>
       <PageTitle
         eyebrow="A PERSONAL DECISION WORKSPACE"
-        title={`Make room for what’s next, ${auth?.user.display_name.split(' ')[0] || 'you'}.`}
-        description="Keep your context. Put it to work. Learn from what happens."
+        title={`Your space to think, ${auth?.user.display_name.split(' ')[0] || 'you'}.`}
+        description="A little context. A clearer next step."
         action={
           <Button
             component={Link}
@@ -48,20 +48,20 @@ export function WorkbenchHome() {
           </Button>
         }
       />
-      <section className="hero-card">
+      <section className="hero-card focused-hero">
         <div className="hero-copy">
           <span className="hero-eyebrow">
             <span className="tiny-dot" />
-            FROM MEMORY TO MOMENTUM
+            YOUR KNOWLEDGE, PUT TO WORK
           </span>
           <h2>
-            Remember what matters.
+            What’s on your mind?
             <br />
-            <em>Decide with perspective.</em>
+            <em>Start with what you know.</em>
           </h2>
           <p>
-            A workspace that connects your research, preferences, and past reasoning to the next
-            useful task.
+            Bring your saved memories to a question. Explore the answer, check its sources, and
+            choose your next step.
           </p>
           <Button
             component={Link}
@@ -69,7 +69,7 @@ export function WorkbenchHome() {
             variant="contained"
             endIcon={<ArrowRight size={16} />}
           >
-            {active.length ? 'Start a task with context' : 'Create your first project'}
+            {active.length ? 'Explore a question' : 'Create your first project'}
           </Button>
           <span className="hero-caption">
             Your knowledge, your choices, a little more continuity.
@@ -114,7 +114,7 @@ export function WorkbenchHome() {
           </div>
           <ArrowUpRight size={17} />
         </Link>
-        <Link to="/journal" className="stat-card">
+        <Link to="/journal?review=due" className="stat-card">
           <span className="stat-icon lavender">
             <NotebookPen size={20} />
           </span>
@@ -125,6 +125,31 @@ export function WorkbenchHome() {
           <ArrowUpRight size={17} />
         </Link>
       </div>
+      {due.length > 0 && (
+        <section className="review-inbox">
+          <div className="section-heading">
+            <div>
+              <div className="eyebrow">PICK UP WHERE YOU LEFT OFF</div>
+              <h2>Time for a little reflection</h2>
+            </div>
+            <Button component={Link} to="/journal?review=due" endIcon={<ArrowRight size={16} />}>
+              Review decisions
+            </Button>
+          </div>
+          <div className="review-inbox-items">
+            {due.slice(0, 3).map((d) => (
+              <Link key={d.id} to={`/projects/${d.project_id}?tab=journal`}>
+                <NotebookPen size={20} />
+                <div>
+                  <strong>{d.title}</strong>
+                  <small>Review due · {d.review_on}</small>
+                </div>
+                <ArrowUpRight size={16} />
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
       <div className="dashboard-columns">
         <section>
           <div className="section-heading">

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Chip, MenuItem, TextField } from '@mui/material';
 import { ArrowUpRight, BookOpen, Brain, Pencil, Plus } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Empty, Failure, Loading, PageTitle } from '../../components/ui';
 import { dueForReview, useDecisions, useProjects } from '../../lib/workbench';
 import { dateLabel } from '../../lib/format';
@@ -13,12 +13,15 @@ export function DecisionJournal({ project }: { project?: Project }) {
   const projects = useProjects();
   const [editing, setEditing] = useState<Decision | 'new' | null>(null);
   const [lesson, setLesson] = useState<Decision | null>(null);
-  const [status, setStatus] = useState('all');
+  const [params] = useSearchParams();
+  const [status, setStatus] = useState(params.get('review') === 'due' ? 'due' : 'all');
   const [selectedProject, setSelectedProject] = useState('all');
   const filtered =
     query.data?.filter(
       (d) =>
-        (status === 'all' || d.status === status) &&
+        (status === 'all' ||
+          d.status === status ||
+          (status === 'due' && d.status !== 'closed' && dueForReview(d.review_on))) &&
         (project || selectedProject === 'all' || d.project_id === selectedProject),
     ) || [];
   const owner =
@@ -54,9 +57,9 @@ export function DecisionJournal({ project }: { project?: Project }) {
       </div>
       <div className="journal-filters">
         <TextField select label="Status" value={status} onChange={(e) => setStatus(e.target.value)}>
-          {['all', 'considering', 'decided', 'closed'].map((s) => (
+          {['all', 'due', 'considering', 'decided', 'closed'].map((s) => (
             <MenuItem key={s} value={s}>
-              {s === 'all' ? 'All statuses' : s}
+              {s === 'all' ? 'All decisions' : s === 'due' ? 'Due for review' : s}
             </MenuItem>
           ))}
         </TextField>
@@ -82,8 +85,12 @@ export function DecisionJournal({ project }: { project?: Project }) {
         <Failure error={query.error} retry={() => query.refetch()} />
       ) : !filtered.length ? (
         <Empty
-          title="A place for your next decision."
-          description="Record what you chose, why it made sense, and the assumptions you want to revisit."
+          title={status === 'due' ? 'You’re all caught up.' : 'A place for your next decision.'}
+          description={
+            status === 'due'
+              ? 'No decisions in this view need a review today.'
+              : 'Record what you chose, why it made sense, and the assumptions you want to revisit.'
+          }
         />
       ) : (
         <div className="decision-list">
@@ -112,7 +119,7 @@ export function DecisionJournal({ project }: { project?: Project }) {
                     }
                     onClick={() => setEditing(d)}
                   >
-                    Revisit
+                    {dueForReview(d.review_on) && d.status !== 'closed' ? 'Review now' : 'Revisit'}
                   </Button>
                 </div>
               </div>
@@ -174,13 +181,13 @@ export function DecisionJournal({ project }: { project?: Project }) {
         <ProjectMemoryEditor
           projectId={lesson.project_id}
           initial={{
-            title: lesson.title,
+            title: `Lesson: ${lesson.title}`.slice(0, 120),
             kind: 'decision',
             content: [
-              lesson.choice,
-              lesson.reasoning && `Reasoning: ${lesson.reasoning}`,
-              lesson.assumptions && `Assumptions: ${lesson.assumptions}`,
+              'What I learned: ',
+              `My decision: ${lesson.choice}`,
               lesson.outcome && `Outcome: ${lesson.outcome}`,
+              'What I would do differently next time: ',
             ]
               .filter(Boolean)
               .join('\n\n')

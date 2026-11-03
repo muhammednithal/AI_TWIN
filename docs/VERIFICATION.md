@@ -25,3 +25,7 @@ The test was **explicitly skipped locally** because no disposable PostgreSQL ins
 - Container builds, Compose startup, deployed HTTPS/CSP, and Linux race-detector execution. CI includes race tests; local Windows checks do not substitute for that run.
 
 Follow `DEVELOPMENT.md` for the manual journey and `MIGRATION.md` before applying the new schema. Use the synthetic preview only for local QA, never as a production API.
+
+## Evidence and reflection update — 4 November 2026
+
+Frontend lint, formatting, 13 Vitest tests and the production build passed. Added tests cover citation transformation without changing code/existing links, missing-information extraction and legacy-answer fallback. Go formatting, vet, unit/SQL-mock tests and server build passed. Dependency manifests were unchanged; clean dependency installation was not repeated for this update. No real database, live Gemini call, Linux race run or browser visual verification was performed. The UI improvements and source-link interactions still need browser acceptance testing. No migrations are needed.

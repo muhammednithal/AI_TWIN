@@ -121,3 +121,8 @@ Review status: `needs_review|accepted|dismissed`; notes: maximum 4,000 character
 | PUT | `/api/projects/:id/decisions/:decisionID` | full decision input → `{decision}` |
 
 Input: `{title,choice,reasoning,assumptions,outcome,status,review_on,task_id?}`. Title: 120 characters; choice required; text fields: maximum 4,000 each. Status: `considering|decided|closed`; review date: empty or `YYYY-MM-DD`. A supporting task must belong to the same account/project. Outcomes are user-recorded and are never silently promoted into memory. Review dates are UI flags, not scheduled reminders.
+## Task result presentation (prompt version 2)
+
+New task context previews use `prompt_version: 2`; clients must preview again after this update. The JSON schema and database schema are unchanged. Generation requests level-two Markdown headings for Result, Context applied, Assumptions & missing information, and Next steps, with standalone memory labels such as `[M1]`.
+
+The UI resolves labels only against the task's stored `context_snapshot.memories`, displays unknown references as unavailable, and preserves older result Markdown. The information-gap panel is an AI-authored excerpt, not independently verified completeness. Existing decision endpoints power the due-review queue and explicit lesson drafts through project-memory creation. No new provider, background notification, or migration is introduced.

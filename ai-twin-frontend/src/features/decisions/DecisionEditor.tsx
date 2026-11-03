@@ -102,7 +102,8 @@ export function DecisionEditor({
             slotProps={{ htmlInput: { maxLength: 4000 } }}
           />
           <TextField
-            label="Assumptions & uncertainties"
+            label="What do you expect to happen?"
+            helperText="Include the assumptions you want to check when you return."
             multiline
             minRows={2}
             value={value.assumptions}
@@ -117,9 +118,11 @@ export function DecisionEditor({
             onChange={(e) => setValue({ ...value, outcome: e.target.value })}
             slotProps={{ htmlInput: { maxLength: 4000 } }}
             placeholder="Return after the decision to record results and lessons."
+            helperText="Compare the outcome with your expectations. After saving, choose Save a lesson in the journal."
           />
           <TextField
             label="Review on"
+            helperText="Choose your next review date, or mark the decision closed when you are finished."
             type="date"
             value={value.review_on}
             onChange={(e) => setValue({ ...value, review_on: e.target.value })}

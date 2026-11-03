@@ -8,6 +8,10 @@ The original personality-based twin/chat experience remains available under `/co
 
 ## Implemented
 
+- Task results render memory citations as buttons opening the immutable input snapshot. Unknown labels are explicitly unavailable; references are model-authored attribution, not independent verification.
+- A pre-decision panel surfaces review dates that have passed and the model's assumptions/missing-information section. Older unstructured answers receive a clear fallback. Review dates are checked at viewing time; gaps are AI-generated, not an exhaustive validation.
+- Dashboard review inbox and journal due-only filter lead into existing outcome editing and explicit, editable lesson creation. No background notifications or automatic memory writes.
+
 - Authenticated, account-scoped projects with purpose, standing instructions, and archive/restore.
 - Typed project memories: fact, preference, research, instruction, decision. Source text, tags, version, pin, archive, review date, optional source-task provenance.
 - Copy-only import of selected owned twin memories. Deterministic destination IDs make repeat imports safe; existing project copies are not overwritten.

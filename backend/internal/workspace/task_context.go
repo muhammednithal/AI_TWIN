@@ -53,7 +53,7 @@ var errInvalidContext = errors.New("invalid context")
 // buildContext is deterministic: every pinned memory is included, explicit IDs
 // must belong to this active project, and the size bound never silently drops a constraint.
 func buildContext(p Project, memories []ProjectMemory, input TaskInput, now time.Time) (TaskContext, error) {
-	out := TaskContext{PromptVersion: 1, ProjectID: p.ID, ProjectName: p.Name, Purpose: p.Purpose, Instructions: p.Instructions, Objective: trim(input.Objective), Kind: input.Kind, Memories: []ContextMemory{}, Warnings: []string{}}
+	out := TaskContext{PromptVersion: 2, ProjectID: p.ID, ProjectName: p.Name, Purpose: p.Purpose, Instructions: p.Instructions, Objective: trim(input.Objective), Kind: input.Kind, Memories: []ContextMemory{}, Warnings: []string{}}
 	wanted := map[uuid.UUID]bool{}
 	for _, id := range input.MemoryIDs {
 		if id == uuid.Nil {

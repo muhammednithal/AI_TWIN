@@ -50,3 +50,8 @@ Up to 30 memories per task, including pinned notes; each memory contains up to 4
 No automatic contradiction detector, automatic fact extraction, web research, file ingestion, scheduled reminders, execution tools, or cross-project semantic retrieval is claimed. The model is instructed to identify conflicts and missing evidence, but that is not a deterministic verification system. “Review on” is a visible flag, not a background notification.
 
 The existing twin/chat experience remains under **Twin studio**. Its per-twin semantic chat retrieval is separate from the new project's explicit context contract. Nothing is automatically moved or deleted during schema migration.
+## Evidence and reflection improvements
+
+Task answers now offer clickable memory references showing the original title, text, version, source and review date. A citation identifies supplied context and does not certify a claim. The Check before deciding panel surfaces notes whose review dates have passed and extracts the AI's missing-information section; older answers without it have an explicit fallback.
+
+The home review inbox highlights up to three due decisions from the latest 200 entries. The journal supports a Due for review filter, outcome editing, rescheduling or closing a decision, and an editable lesson draft. Saving a lesson is always a deliberate user action. There are no automated notifications.

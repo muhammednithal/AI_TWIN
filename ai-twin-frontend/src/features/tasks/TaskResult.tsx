@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Alert, Button, Chip, MenuItem, TextField } from '@mui/material';
 import { Check, Copy, Download, FilePlus2, NotebookPen } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { MarkdownContent } from '../../components/MarkdownContent';
+import { EvidenceResult } from './EvidenceResult';
 import { ContextPanel } from './ContextPanel';
 import { workbench, statusLabel } from '../../lib/workbench';
 import { download, errorMessage } from '../../lib/api';
@@ -49,13 +49,7 @@ export function TaskResult({ project, task }: { project: Project; task: TaskRun 
           size="small"
         />
       </div>
-      <Alert severity="info">
-        This is an AI-generated result from your saved context. Review its assumptions and verify
-        missing or time-sensitive information.
-      </Alert>
-      <div className="result-document">
-        <MarkdownContent>{task.result || ''}</MarkdownContent>
-      </div>
+      <EvidenceResult key={task.id} task={task} />
       <div className="result-actions">
         <Button
           size="small"
