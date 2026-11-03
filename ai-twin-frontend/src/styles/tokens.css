@@ -1,0 +1,90 @@
+:root {
+  font-family: Inter, sans-serif;
+  color: #203b30;
+  background: #f8f9f6;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --bg: #f8f9f6;
+  --surface: #fff;
+  --side: #f0f3ed;
+  --ink: #203b30;
+  --muted: #7a847c;
+  --line: #e5e9e1;
+  --green: #265c48;
+  --soft: #e6eee3;
+  --hero: #e7eddf;
+  --sage: #e4eddf;
+  --peach: #f5e9dc;
+  --lavender: #eeeafa;
+}
+:root[data-theme='dark'] {
+  --bg: #141b18;
+  --surface: #1b2520;
+  --side: #17201a;
+  --ink: #e6eee6;
+  --muted: #9aaa9f;
+  --line: #2d3a31;
+  --green: #a2d9be;
+  --soft: #26382c;
+  --hero: #233428;
+  --sage: #2e4231;
+  --peach: #463c2d;
+  --lavender: #39334a;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg) !important;
+  color: var(--ink);
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button,
+input,
+textarea {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+}
+button:focus-visible,
+a:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #76a389;
+  outline-offset: 4px;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+h1,
+h2,
+h3 {
+  letter-spacing: -0.045em;
+}
+p {
+  line-height: 1.7;
+}
+h1 {
+  font-size: 34px;
+  font-weight: 550;
+  line-height: 1.2;
+}
+h2 {
+  font-size: 21px;
+  font-weight: 550;
+}
+h3 {
+  font-size: 16px;
+  font-weight: 600;
+}

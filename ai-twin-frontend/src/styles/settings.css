@@ -1,0 +1,91 @@
+.settings-layout {
+  max-width: 850px;
+}
+.settings-card {
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  margin-bottom: 22px;
+}
+.settings-card h2 {
+  font-size: 18px;
+}
+.settings-description {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 18px 0 23px;
+  line-height: 1.9;
+}
+.profile-block {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 0 25px;
+}
+.user-avatar.large {
+  width: 49px;
+  height: 49px;
+  font-size: 20px;
+}
+.profile-block h3 {
+  font-size: 15px;
+}
+.profile-block p {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.profile-block .subtle-badge {
+  margin-left: auto;
+}
+.setting-row {
+  border-top: 1px solid var(--line);
+  padding: 23px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.setting-row:last-child {
+  padding-bottom: 0;
+}
+.setting-row strong {
+  font-size: 13px;
+  font-weight: 550;
+}
+.setting-row p {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.switch-label {
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+.privacy-note {
+  display: flex;
+  gap: 12px;
+  background: var(--soft);
+  padding: 17px;
+  border-radius: 10px;
+  margin-top: 25px;
+}
+.privacy-note > svg {
+  flex-shrink: 0;
+  color: var(--green);
+  margin-top: 4px;
+}
+.privacy-note p {
+  font-size: 11px;
+  color: var(--muted);
+}
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--green);
+}

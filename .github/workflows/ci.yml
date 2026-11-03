@@ -1,0 +1,41 @@
+name: Quality checks
+on:
+  push:
+    branches: [main, prod]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ai-twin-frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: ai-twin-frontend/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm test
+      - run: npm run build
+      - run: npm audit --omit=dev --audit-level=high
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
+      - run: test -z "$(gofmt -l .)"
+      - run: go vet ./...
+      - run: go test -race -cover ./...
+      - run: go build ./cmd/server

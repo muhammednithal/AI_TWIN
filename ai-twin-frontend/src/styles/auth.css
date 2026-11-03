@@ -1,0 +1,169 @@
+.auth-layout {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.auth-story {
+  background: var(--hero);
+  padding: 40px 55px 30px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.auth-story .brand {
+  margin: 0;
+}
+.auth-story-content {
+  margin: auto 0;
+  padding-top: 65px;
+  max-width: 550px;
+}
+.pill {
+  font-size: 8px;
+  letter-spacing: 1.7px;
+  border: 1px solid #b5c7a280;
+  padding: 7px 11px;
+  border-radius: 20px;
+}
+.auth-story h1 {
+  font-size: 48px;
+  line-height: 1.16;
+  font-weight: 500;
+  letter-spacing: -2.5px;
+  margin-top: 28px;
+}
+.auth-story-content > p {
+  max-width: 350px;
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--muted);
+  margin-top: 20px;
+}
+.auth-orbit {
+  height: 270px;
+  position: relative;
+  margin: 15px auto 0;
+  max-width: 380px;
+}
+.orbit-ring {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  top: 15px;
+  left: 65px;
+  border: 1px solid #b1c39f80;
+  border-radius: 50%;
+  transform: rotate(-20deg) scaleY(0.7);
+}
+.ring-two {
+  width: 310px;
+  height: 310px;
+  left: 20px;
+  top: -30px;
+  transform: rotate(-20deg) scaleY(0.7);
+}
+.orbit-center {
+  position: absolute;
+  left: 120px;
+  top: 55px;
+  width: 115px;
+  height: 125px;
+  border-radius: 46% 54% 51% 49%;
+  background: radial-gradient(circle at 25% 20%, #d8e1bc, #b2c49a 60%, #8fac7d);
+  box-shadow: 0 20px 35px #77946530;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f9fff0;
+  transform: rotate(-15deg);
+}
+.orbit-label {
+  position: absolute;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 11px 13px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 10px;
+  color: var(--muted);
+  box-shadow: 0 10px 25px #78905a0d;
+}
+.label-one {
+  left: 13px;
+  top: 70px;
+  transform: rotate(-7deg);
+}
+.label-two {
+  right: 0;
+  top: 164px;
+  transform: rotate(5deg);
+}
+.orbit-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #96ac86;
+  border-radius: 50%;
+  right: 28px;
+  top: 46px;
+}
+.auth-trust {
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--muted);
+  margin-bottom: 50px;
+}
+.auth-story > small {
+  font-size: 9px;
+  color: var(--muted);
+  margin-top: 30px;
+}
+.auth-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+}
+.form-wrap {
+  width: 360px;
+  max-width: 100%;
+}
+.form-wrap h2 {
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.form-wrap > p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 17px 0 33px;
+}
+.form-wrap form {
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+}
+.form-wrap form > .MuiButton-root {
+  margin-top: 4px;
+  font-size: 12px;
+}
+.form-wrap .auth-switch {
+  font-size: 11px;
+  text-align: center;
+  margin-top: 25px;
+}
+.auth-switch a {
+  font-weight: 600;
+  color: var(--green);
+}
+.auth-footnote {
+  font-size: 9px;
+  text-align: center;
+  color: var(--muted);
+  margin-top: 50px;
+}

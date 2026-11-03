@@ -31,3 +31,12 @@ Thumbs.db
 # -------- ENV FILES (root-level) --------
 .env
 .env.local
+
+# Workspace application outputs
+ai-twin-frontend/node_modules/
+ai-twin-frontend/dist/
+ai-twin-frontend/.env*
+!ai-twin-frontend/.env.example
+backend/coverage.out
+*.tsbuildinfo
+.artifacts/

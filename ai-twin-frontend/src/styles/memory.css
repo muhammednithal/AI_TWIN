@@ -1,0 +1,78 @@
+.memory-banner {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 23px;
+  border-radius: 12px;
+  margin-bottom: 27px;
+}
+.memory-banner strong {
+  font-size: 13px;
+  font-weight: 550;
+}
+.memory-banner p {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.memory-banner > .subtle-badge {
+  margin-left: auto;
+}
+.memory-toolbar {
+  justify-content: flex-start;
+}
+.memory-toolbar > .MuiTextField-root:first-child {
+  max-width: 220px;
+}
+.memory-toolbar > .MuiTextField-root:last-child {
+  margin-left: auto;
+  max-width: 340px;
+}
+.muted {
+  font-size: 10px;
+  color: var(--muted);
+}
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.memory-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+}
+.memory-tone-1 {
+  background: color-mix(in srgb, var(--peach) 25%, var(--surface));
+}
+.memory-tone-2 {
+  background: color-mix(in srgb, var(--sage) 25%, var(--surface));
+}
+.memory-card > .card-top {
+  color: var(--muted);
+  margin-bottom: 15px;
+}
+.memory-card > p {
+  font-size: 13px;
+  line-height: 1.9;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin-bottom: 30px;
+}
+.memory-card-footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px;
+}
+.memory-card-footer > small {
+  font-size: 8px;
+  white-space: nowrap;
+  color: var(--muted);
+}
