@@ -176,11 +176,12 @@
 }
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 17px;
   margin: 23px 0 34px;
 }
 .stat-card {
+  min-width: 0;
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 11px;
@@ -238,8 +239,14 @@
 }
 .dashboard-columns {
   display: grid;
-  grid-template-columns: 1.18fr 1fr;
+  grid-template-columns: minmax(0, 1.18fr) minmax(0, 1fr);
   gap: 28px;
+}
+.dashboard-columns > section {
+  min-width: 0;
+}
+.dashboard-columns > section > .section-heading {
+  flex-wrap: wrap;
 }
 .section-heading {
   display: flex;
