@@ -3,7 +3,8 @@ import { NavLink, Link, Outlet, useLocation } from 'react-router-dom';
 import { Button, Drawer, IconButton, Tooltip } from '@mui/material';
 import {
   ArrowUpRight,
-  Brain,
+  FolderOpen,
+  NotebookPen,
   ChevronRight,
   LayoutDashboard,
   LogOut,
@@ -19,18 +20,18 @@ import {
 } from 'lucide-react';
 import { useApp } from './context';
 import { storeAuth } from '../lib/api';
-import { useSessions } from '../lib/queries';
+import { useProjects } from '../lib/workbench';
 const nav = [
   { to: '/', label: 'Overview', icon: LayoutDashboard },
-  { to: '/chat', label: 'Conversations', icon: MessageSquare },
-  { to: '/twins', label: 'My twins', icon: Users },
-  { to: '/memory', label: 'Memory library', icon: Brain },
+  { to: '/projects', label: 'Projects', icon: FolderOpen },
+  { to: '/journal', label: 'Decision journal', icon: NotebookPen },
+  { to: '/companion', label: 'Twin studio', icon: Users },
 ];
 export function Shell() {
   const { auth, mode, toggleMode } = useApp();
   const [mobile, setMobile] = useState(false);
   const location = useLocation();
-  const sessions = useSessions();
+  const projects = useProjects();
   const sidebar = (
     <>
       <Link className="brand" to="/" onClick={() => setMobile(false)}>
@@ -59,26 +60,29 @@ export function Shell() {
       </nav>
       <div className="sidebar-divider" />
       <div className="recent-label">
-        RECENT CONVERSATIONS
-        <Link to="/chat" aria-label="New conversation">
+        RECENT PROJECTS
+        <Link to="/projects" aria-label="Browse projects">
           <Plus size={16} />
         </Link>
       </div>
       <div className="recent-list">
-        {sessions.data?.slice(0, 5).map((s) => (
-          <NavLink
-            onClick={() => setMobile(false)}
-            key={s.id}
-            to={`/chat/${s.id}`}
-            className="recent-item"
-          >
-            <span className="tiny-dot" />
-            {s.title || 'Untitled conversation'}
-          </NavLink>
-        ))}
-        {!sessions.data?.length && (
+        {projects.data
+          ?.filter((p) => !p.archived)
+          .slice(0, 5)
+          .map((s) => (
+            <NavLink
+              onClick={() => setMobile(false)}
+              key={s.id}
+              to={`/projects/${s.id}`}
+              className="recent-item"
+            >
+              <span className="tiny-dot" />
+              {s.name}
+            </NavLink>
+          ))}
+        {!projects.data?.length && (
           <p>
-            Your conversations will
+            Your next project will
             <br />
             find a home here.
           </p>
@@ -87,14 +91,14 @@ export function Shell() {
       <div className="sidebar-bottom">
         <div className="sidebar-note">
           <span className="leaf">✳</span>
-          <strong>A little more you.</strong>
+          <strong>Your context, carried forward.</strong>
           <p>
-            Give your twin context.
+            Remember what matters.
             <br />
-            Make every conversation count.
+            Act with more perspective.
           </p>
-          <Link to="/memory">
-            Build your memory <ArrowUpRight size={14} />
+          <Link to="/projects">
+            Open a project <ArrowUpRight size={14} />
           </Link>
         </div>
         <NavLink className="nav-item" to="/settings" onClick={() => setMobile(false)}>
@@ -118,7 +122,13 @@ export function Shell() {
   );
   const label = location.pathname.startsWith('/chat')
     ? 'Conversations'
-    : nav.find((n) => n.to === location.pathname)?.label || 'Settings';
+    : location.pathname.startsWith('/projects')
+      ? 'Projects'
+      : { '/twins': 'My twins', '/memory': 'Twin memories', '/settings': 'Settings' }[
+          location.pathname
+        ] ||
+        nav.find((n) => n.to === location.pathname)?.label ||
+        'Workspace';
   return (
     <div className="app-layout">
       <aside className="sidebar">{sidebar}</aside>
@@ -164,12 +174,12 @@ export function Shell() {
             </Tooltip>
             <Button
               component={Link}
-              to="/chat"
+              to="/projects"
               size="small"
               startIcon={<Plus size={16} />}
               variant="outlined"
             >
-              New chat
+              Start a task
             </Button>
           </div>
         </header>

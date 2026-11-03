@@ -67,6 +67,22 @@ func New(db *gorm.DB, client ai.Client, secret string, origins []string) *gin.En
 	api.DELETE("/sessions/:id", a.deleteSession)
 	api.POST("/chat", limiter(30, time.Minute, true), a.chat)
 	api.GET("/export", a.export)
+	api.GET("/projects", a.listProjects)
+	api.POST("/projects", a.saveProject)
+	api.GET("/projects/:id", a.getProject)
+	api.PUT("/projects/:id", a.saveProject)
+	api.GET("/projects/:id/memories", a.listProjectMemories)
+	api.POST("/projects/:id/memories", a.saveProjectMemory)
+	api.POST("/projects/:id/import-twin-memories", a.importTwinMemories)
+	api.PUT("/projects/:id/memories/:memoryID", a.saveProjectMemory)
+	api.POST("/projects/:id/context", a.previewTask)
+	api.POST("/projects/:id/tasks", limiter(20, time.Minute, true), a.runTask)
+	api.GET("/tasks", a.listTasks)
+	api.GET("/tasks/:taskID", a.getTask)
+	api.PUT("/tasks/:taskID/review", a.reviewTask)
+	api.GET("/decisions", a.listDecisions)
+	api.POST("/projects/:id/decisions", a.saveDecision)
+	api.PUT("/projects/:id/decisions/:decisionID", a.saveDecision)
 	return r
 }
 func fail(c *gin.Context, status int, message string) {

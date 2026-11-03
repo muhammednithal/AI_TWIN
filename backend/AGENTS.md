@@ -14,3 +14,7 @@ Read the root `AGENTS.md` first.
 - Use `sqlmock` for focused SQL ownership/failure tests. These tests do not prove a real PostgreSQL migration succeeds. Add disposable PostgreSQL integration tests for migration-dependent work.
 
 Tests must not read real API keys or mutate an existing database. Run Go formatting, vet, tests, and build before handoff.
+
+Project/task code is grouped in `projects.go`, `project_memory.go`, `project_import.go`, `task_context.go`, `tasks.go`, and `decisions.go`. Use `project` and parent-row locking for ownership and consistent context. Result/snapshot fields are immutable; only review state is editable. Context signing is deterministic and covers prompt version, project instructions, objective/type, and memory content/version/provenance. Revalidate before generation and in the persistence transaction. Keep request IDs stable for retries. New project notes are stored without provider calls.
+
+`project_integration_test.go` provisions its own random schema only when `TWIN_TEST_DATABASE_URL` is explicitly local and ends in `_test`. CI supplies a disposable PostgreSQL service. Report local skips separately from passes.

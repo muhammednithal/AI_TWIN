@@ -14,3 +14,5 @@ Read the root `AGENTS.md` first.
 - TypeScript 6.0 is pinned to the newest range supported by typescript-eslint. Recheck peer compatibility when upgrading; do not use `--force` or `--legacy-peer-deps`.
 
 Run `npm run format`, then lint, test, and build after changes. `API_PROXY_TARGET` only controls the development proxy; production uses the nginx same-origin API proxy or `VITE_API_URL` at build time.
+
+The primary project workflow lives in `features/projects`, `features/tasks`, and `features/decisions`, with contracts/queries in `lib/workbench-types.ts` and `lib/workbench.ts`. Keys are `['projects']`, `['project', id]`, `['project-memories', id]`, `['tasks', projectId|'all']`, `['task', id]`, and `['decisions', projectId|'all']`. Clear a preview when the objective, task type, or selected IDs change; preserve the request ID after ambiguous failures. A 409 requires refreshed context and a new preview. Pinned memories cannot be unchecked in the task picker. Model output promotion must remain an explicit editable draft, with source-task provenance.

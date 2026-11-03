@@ -27,6 +27,8 @@ For public deployment, put an HTTPS reverse proxy/load balancer in front of ngin
 
 Start with one API instance. The in-process rate limiter and account/twin overlap guard are not distributed. Multiple instances need shared rate limiting plus persisted idempotency/concurrency controls before they provide consistent behavior. A completed reply is saved atomically, but ambiguous network disconnects are not idempotent: recheck history before resending.
 
+Project tasks now have persisted request-ID idempotency and immutable context snapshots. Retries return a matching saved result; provider-call deduplication is still process-local. The legacy chat limitation above remains. Apply the additive project schema migration before releasing this version. CI provisions a disposable PostgreSQL service for project integration tests; it does not migrate your deployed database.
+
 Readiness checks PostgreSQL, not Gemini, to avoid spending provider quota during health probes. Monitor provider error rate/latency and quota separately. The API uses a 20-connection database pool, 90-second request context, 45-second provider-call timeout, and graceful shutdown. Adjust only after measuring actual workload.
 
 The conversation index returns the latest 200 records; export includes all records. Retrieval currently loads a twin's context and ranks in process. Set operational account/context quotas before opening unrestricted signup. This initial implementation does not provide verified email, password recovery, token revocation, billing, or an admin console.

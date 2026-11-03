@@ -17,6 +17,14 @@ The backend is a small modular monolith. A composition root injects the database
 
 ## Data model
 
+The primary project workflow adds four tables: `projects` (account ownership, purpose, standing instructions, archive); `project_memories` (typed/versioned context and provenance); `task_runs` (immutable result and context snapshot, unique request ID, mutable review state); and `decisions` (user choices, reasoning, assumptions, outcomes). Project memories do not require embeddings: inclusion is explicit and inspectable.
+
+Project child writes lock the owned project before changing records. A context preview canonicalizes pinned plus selected active notes into labeled references and signs the manifest with HMAC-SHA256. Generation checks that signature before calling the provider and verifies the manifest again while holding the project lock before persistence. A context edit during generation returns 409 and does not persist an unconfirmed result. The task request ID is unique in PostgreSQL; retries return an existing matching result. Copies of legacy twin memories use stable per-project IDs to avoid overwriting edited copies on re-import.
+
+Task input snapshots retain full included text, sources, versions, and labels. They are historical inputs, not a record of which references the model actually used. Review and journal updates never alter snapshots. “Save as memory” requires explicit user editing/confirmation. Standing instructions and pinned constraints are always included or the 30-memory bound rejects the task.
+
+The tables below describe the retained twin/chat workflow:
+
 - `users`: account identity, normalized email, password hash.
 - `personalities`: twin ownership, name, language, `slider_json`, style summary. This legacy name is intentional.
 - `samples`: writing examples and JSON embeddings; associated by `personality_id`.
@@ -49,3 +57,5 @@ Deletion follows the same lock order so it cannot race a message write into orph
 ## Scale envelope
 
 Designed for an initial single API instance. Rate limiting and overlapping-send protection are process-local; vector ranking is linear in the selected twin's context size. Before scaling, add shared rate limits/idempotency, cursor pagination, vector indexing, and production observability. See the roadmap.
+
+Project tasks have persisted idempotency for result storage. Distributed provider-call deduplication remains future work; two replicas can still spend generation quota before one wins the unique request-ID write. Project task/journal indexes return the latest 200 records; full export includes all records. Project previews use a short parent-row lock to take a consistent context snapshot, without making network calls.

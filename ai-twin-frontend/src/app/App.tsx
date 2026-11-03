@@ -11,6 +11,10 @@ import { TwinsPage } from '../features/twins/TwinsPage';
 import { ChatPage } from '../features/chat/ChatPage';
 import { MemoryPage } from '../features/memory/MemoryPage';
 import { SettingsPage } from '../features/settings/SettingsPage';
+import { WorkbenchHome } from '../features/projects/WorkbenchHome';
+import { ProjectsPage } from '../features/projects/ProjectsPage';
+import { ProjectPage } from '../features/projects/ProjectPage';
+import { DecisionJournal } from '../features/decisions/Journal';
 
 const client = new QueryClient({
   defaultOptions: { queries: { staleTime: 30_000, retry: 1, refetchOnWindowFocus: false } },
@@ -84,7 +88,11 @@ export default function App() {
               element={auth ? <Navigate to="/" replace /> : <AuthPage register />}
             />
             <Route element={auth ? <Shell /> : <Navigate to="/login" replace />}>
-              <Route index element={<Dashboard />} />
+              <Route index element={<WorkbenchHome />} />
+              <Route path="projects" element={<ProjectsPage />} />
+              <Route path="projects/:id" element={<ProjectPage />} />
+              <Route path="journal" element={<DecisionJournal />} />
+              <Route path="companion" element={<Dashboard />} />
               <Route path="twins" element={<TwinsPage />} />
               <Route path="chat" element={<ChatPage key="new" />} />
               <Route path="chat/:id" element={<ChatPage />} />

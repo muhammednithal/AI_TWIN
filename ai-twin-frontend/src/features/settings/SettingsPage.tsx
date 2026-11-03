@@ -75,8 +75,9 @@ export function SettingsPage() {
             <LockKeyhole size={19} />
           </div>
           <p className="settings-description">
-            Download your twins, writing samples, memories, and full conversation history as a JSON
-            file. Embedding vectors and credentials are excluded.
+            Download your projects, typed memories, task results and context snapshots, decision
+            journal, twins, and conversations as a JSON file. Embedding vectors and credentials are
+            excluded.
           </p>
           {error && <Alert severity="error">{error}</Alert>}
           <Button
@@ -90,9 +91,10 @@ export function SettingsPage() {
           <div className="privacy-note">
             <ShieldCheck size={19} />
             <p>
-              Your writing samples and memory content are sent to Google Gemini to generate
-              embeddings. Chat sends your message, up to 12 recent messages, and relevant context to
-              Gemini. Nothing is automatically added to your memory library.
+              Project memories are stored without AI processing. A task sends only the project
+              brief, objective, and previewed context to Gemini when you run it. Twin chat
+              separately uses writing-sample embeddings and recent conversation context. Nothing is
+              silently promoted into project memory.
             </p>
           </div>
         </section>

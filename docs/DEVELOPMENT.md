@@ -25,7 +25,7 @@ npm ci
 npm run dev
 ```
 
-Open the printed local URL. Vite proxies `/api` and `/auth` to `http://localhost:8080`. `API_PROXY_TARGET` overrides the dev proxy; `VITE_API_URL` is a build-time browser API origin override. Neither may contain private provider keys. Create an account, create a twin using your own writing samples, add memories, and start a conversation.
+Open the printed local URL. Vite proxies `/api` and `/auth` to `http://localhost:8080`. `API_PROXY_TARGET` overrides the dev proxy; `VITE_API_URL` is a build-time browser API origin override. Neither may contain private provider keys. Create an account and a project, add memories, and run a task after previewing its context. The retained twin/chat tools are available under Twin studio.
 
 ## Disposable visual preview
 
@@ -68,3 +68,21 @@ Use `go test -race ./...` on a supported CGO-enabled toolchain; CI runs it on Li
 ## Manual acceptance pass
 
 Verify signup/login/logout; create/edit/delete a twin; add/edit/search/delete memories; start/reopen/rename/delete conversations; inspect context references; copy/export messages; export the account; switch themes; keyboard-navigate dialogs; check at 390px, 768px, and desktop widths. Simulate provider/network failure and verify the draft remains. Test two real disposable accounts against each other's IDs before a release.
+
+## Decision-workspace walkthrough
+
+After migrating the schema, create a project, add typed memories, and pin one constraint. Open Task studio, describe an analyze/compare/plan/draft task, select memories, and preview the exact context. Run only after reviewing it. Inspect the result and context snapshot, save your review, and record a decision. Revisit the journal later to add an outcome. Edit a memory and confirm that an existing task still shows the old input snapshot.
+
+Project notes are stored without model calls. Only running a task sends its previewed context to Gemini. The fixture API also supports this workflow using synthetic project data. Include `[fail]` in a task objective to simulate generation failure.
+
+## Real PostgreSQL integration tests
+
+GitHub CI provisions a disposable PostgreSQL 17 service and runs the integration suite alongside unit tests. Locally, supply an explicit local database whose name ends in `_test`:
+
+```powershell
+$env:TWIN_TEST_DATABASE_URL='postgres://postgres:TEST_PASSWORD@localhost:5432/twin_test?sslmode=disable'
+cd backend
+go test -v -run TestProjectTaskJournalPostgres ./internal/workspace
+```
+
+The test creates a random schema and removes only that schema afterward. It does not load `.env`. Remote hosts and names not ending in `_test` are rejected. Without this variable, the integration test is explicitly skipped. It covers additive schema creation, account isolation, selected/pinned context, idempotent retries, immutable snapshots, review/journal persistence, export, provider failure, and context edits during generation. A skipped local test is not a verified database integration pass.

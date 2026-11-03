@@ -24,3 +24,11 @@ Frontend: `npm ci`, `npm run lint`, `npm run format:check`, `npm test`, `npm run
 Backend: `gofmt -w internal cmd`, `go vet ./...`, `go test ./...`, `go build ./cmd/server` in `backend`. CI also runs the race detector on Linux.
 
 Update the API docs and agent context whenever contracts, persistence, configuration, or product boundaries change. Report tests actually run and distinguish fixture, mocked SQL, and real integration verification.
+
+## Project workflow additions
+
+- Projects are the primary workflow; legacy twin/chat tools remain under Twin studio. Read `docs/PRODUCT.md` before changing product scope.
+- Scope project memories, tasks, and journal entries to the owned project/account. Project-child transactions lock the project before child rows.
+- Preserve explicit context confirmation, pinned constraints, immutable input snapshots, and task request-ID idempotency. Bump the context prompt version when its contract changes.
+- Never add hidden retrieval or automatic memory promotion to project tasks. Source URLs are recorded text, not fetched content.
+- PostgreSQL integration tests require an explicitly local `*_test` database and a random owned schema. They must not load real `.env` credentials or run migrations against existing application schemas.

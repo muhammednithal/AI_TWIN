@@ -83,6 +83,10 @@ func (a *API) export(c *gin.Context) {
 	twins := []Twin{}
 	sessions := []Session{}
 	memories := []Memory{}
+	projects := []Project{}
+	projectMemories := []ProjectMemory{}
+	tasks := []TaskRun{}
+	decisions := []Decision{}
 	err := a.DB.WithContext(c.Request.Context()).Transaction(func(tx *gorm.DB) error {
 		if err := tx.Preload("Samples").Where("user_id = ?", uid).Find(&twins).Error; err != nil {
 			return err
@@ -90,12 +94,24 @@ func (a *API) export(c *gin.Context) {
 		if err := tx.Preload("Messages", func(db *gorm.DB) *gorm.DB { return db.Order("created_at ASC") }).Where("user_id = ?", uid).Find(&sessions).Error; err != nil {
 			return err
 		}
-		return tx.Joins("JOIN personalities ON personalities.id = memories.personality_id").Where("personalities.user_id = ?", uid).Find(&memories).Error
+		if err := tx.Joins("JOIN personalities ON personalities.id = memories.personality_id").Where("personalities.user_id = ?", uid).Find(&memories).Error; err != nil {
+			return err
+		}
+		if err := tx.Where("user_id = ?", uid).Find(&projects).Error; err != nil {
+			return err
+		}
+		if err := tx.Joins("JOIN projects ON projects.id = project_memories.project_id").Where("projects.user_id = ?", uid).Find(&projectMemories).Error; err != nil {
+			return err
+		}
+		if err := tx.Where("user_id = ?", uid).Find(&tasks).Error; err != nil {
+			return err
+		}
+		return tx.Where("user_id = ?", uid).Find(&decisions).Error
 	})
 	if err != nil {
 		internal(c, err)
 		return
 	}
 	c.Header("Content-Disposition", "attachment; filename=ai-twin-workspace.json")
-	c.JSON(200, gin.H{"version": 1, "user": current(c), "twins": twins, "sessions": sessions, "memories": memories})
+	c.JSON(200, gin.H{"version": 2, "user": current(c), "twins": twins, "sessions": sessions, "memories": memories, "projects": projects, "project_memories": projectMemories, "tasks": tasks, "decisions": decisions})
 }

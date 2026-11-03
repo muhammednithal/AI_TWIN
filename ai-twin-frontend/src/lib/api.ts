@@ -1,6 +1,15 @@
 import type { Auth, ChatResult, Memory, Session, Twin, TwinInput } from './types';
 
 const base = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    public status: number,
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
 export function readAuth(): Auth | null {
   try {
     const value = JSON.parse(sessionStorage.getItem('twin.auth') || 'null');
@@ -19,7 +28,7 @@ export function storeAuth(value: Auth | null) {
   else sessionStorage.removeItem('twin.auth');
   window.dispatchEvent(new Event('auth-change'));
 }
-async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
+export async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const auth = readAuth();
   const response = await fetch(`${base}${path}`, {
     ...options,
@@ -37,7 +46,10 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   if (!response.ok) {
     if (response.status === 401 && auth && !path.startsWith('/auth/')) storeAuth(null);
     const body = await response.json().catch(() => ({}));
-    throw new Error(body.error || 'Could not reach your workspace. Please try again.');
+    throw new ApiError(
+      body.error || 'Could not reach your workspace. Please try again.',
+      response.status,
+    );
   }
   const result = response.status === 204 ? undefined : await response.json();
   if (!path.startsWith('/auth/') && auth?.token !== readAuth()?.token) {
@@ -45,7 +57,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   }
   return result as T;
 }
-const body = (method: string, value?: unknown) => ({
+export const body = (method: string, value?: unknown) => ({
   method,
   ...(value === undefined ? {} : { body: JSON.stringify(value) }),
 });

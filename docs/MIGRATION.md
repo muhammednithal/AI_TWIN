@@ -29,3 +29,11 @@ The schema adds conversation titles and indexes. New IDs are generated in Go so 
 ## Rollback
 
 Do not drop data to roll back. Return to the previous images and restored database snapshot if the rehearsal shows incompatibility. Once new data has been written under the new schema, plan a reviewed data reconciliation before restoring an older snapshot; otherwise those writes would be lost. The production database migration and release have not been executed as part of this restructure.
+
+## Decision-workspace evolution
+
+The migration now also creates `projects`, `project_memories`, `task_runs`, and `decisions`, plus their indexes. Existing twin tables and records remain unchanged in purpose. Run the explicit migration against your backed-up development/staging database before starting the updated app. Normal API startup still does not migrate.
+
+Existing twin memories are not automatically assigned to projects. In a project's Memories tab, choose **Bring memories from a twin**, select notes and their type, and import. This is copy-only: originals remain, and repeat imports do not overwrite project copies. New project memories use explicit task selection rather than embeddings.
+
+Full account export is now version 2. It adds projects, project memories, task results with immutable context snapshots, and decision journal entries. Export consumers must handle the new keys and retain existing legacy keys. Context-pack import is not implemented.

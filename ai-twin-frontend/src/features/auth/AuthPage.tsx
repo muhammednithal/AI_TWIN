@@ -36,11 +36,12 @@ export function AuthPage({ register = false }: { register?: boolean }) {
           <span className="pill">YOUR MIND, WITH A LITTLE MORE ROOM</span>
           <h1>
             A space to think.
-            <br />A twin that gets you.
+            <br />
+            Context that stays with you.
           </h1>
           <p>
-            Turn your voice, ideas, and memories into a personal AI companion. Make room for what
-            comes next.
+            Connect your research, preferences, and past decisions to your next useful task.
+            Remember what matters and learn from what happens.
           </p>
           <div className="auth-orbit">
             <div className="orbit-ring ring-one" />
@@ -54,7 +55,7 @@ export function AuthPage({ register = false }: { register?: boolean }) {
             </span>
             <span className="orbit-label label-two">
               <MessageSquare size={16} />
-              Your voice
+              Your next step
             </span>
             <span className="orbit-dot" />
           </div>
@@ -71,8 +72,8 @@ export function AuthPage({ register = false }: { register?: boolean }) {
           <h2>{register ? 'Meet your other mind.' : 'Welcome back.'}</h2>
           <p>
             {register
-              ? 'Create your personal workspace. Your first twin is waiting.'
-              : 'Your ideas and conversations, right where you left them.'}
+              ? 'Create a workspace for your context, tasks, and decisions.'
+              : 'Your projects, memories, and decisions, right where you left them.'}
           </p>
           <form onSubmit={submit}>
             {error && <Alert severity="error">{error}</Alert>}

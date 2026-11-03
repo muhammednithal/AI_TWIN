@@ -43,7 +43,7 @@ func main() {
 	sqlDB.SetMaxIdleConns(5)
 	sqlDB.SetConnMaxLifetime(30 * time.Minute)
 	if *migrate {
-		if err := db.AutoMigrate(&workspace.User{}, &workspace.Twin{}, &workspace.Sample{}, &workspace.Memory{}, &workspace.Session{}, &workspace.Message{}); err != nil {
+		if err := db.AutoMigrate(&workspace.User{}, &workspace.Twin{}, &workspace.Sample{}, &workspace.Memory{}, &workspace.Session{}, &workspace.Message{}, &workspace.Project{}, &workspace.ProjectMemory{}, &workspace.TaskRun{}, &workspace.Decision{}); err != nil {
 			slog.Error("migration failed", "error", err)
 			os.Exit(1)
 		}

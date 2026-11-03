@@ -7,7 +7,7 @@ These are planned, not implemented features.
 1. Verified email and password recovery; account deletion with a documented retention policy.
 2. HttpOnly cookie sessions, CSRF protection, refresh/revocation, and server-side session management.
 3. Per-account token/context quotas, edge rate limits, and provider-cost observability.
-4. Reviewed, versioned SQL migrations; real PostgreSQL CI integration tests and restore drills.
+4. Reviewed, versioned SQL migrations and restore drills; expand the new disposable PostgreSQL CI suite with legacy-data upgrade and concurrency tests.
 5. Persisted chat idempotency and distributed locking before horizontal scaling.
 
 ## Useful product additions
@@ -18,6 +18,9 @@ These are planned, not implemented features.
 - Streaming replies with cancellation and explicit partial-message semantics.
 - Reusable writing templates and side-by-side tone previews.
 - Import of the versioned workspace export after validation and conflict resolution.
+- Live research with source retrieval times and evidence snapshots, kept separate from saved memory claims.
+- Deterministic memory conflict resolution and user-approved cross-project context suggestions.
+- Optional review reminders; current review dates are flags rather than scheduled notifications.
 
 ## Scale
 

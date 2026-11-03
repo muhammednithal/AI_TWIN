@@ -16,16 +16,23 @@ import (
 )
 
 type fakeAI struct {
-	embedErr, generateErr error
-	calls                 int
+	embedErr, generateErr   error
+	calls                   int
+	lastSystem, lastContent string
+	onGenerate              func()
 }
 
 func (f *fakeAI) Embed(context.Context, string) ([]float32, error) {
 	f.calls++
 	return []float32{1, 0}, f.embedErr
 }
-func (f *fakeAI) Generate(context.Context, string, string) (string, error) {
+func (f *fakeAI) Generate(_ context.Context, system, content string) (string, error) {
 	f.calls++
+	f.lastSystem = system
+	f.lastContent = content
+	if f.onGenerate != nil {
+		f.onGenerate()
+	}
 	return "A helpful reply.", f.generateErr
 }
 func setup(t *testing.T) (*gin.Engine, sqlmock.Sqlmock, uuid.UUID, string, *fakeAI) {
@@ -64,7 +71,7 @@ func perform(r http.Handler, method, path, token, body string) *httptest.Respons
 }
 func TestPrivateEndpointsRequireAuthentication(t *testing.T) {
 	r, _, _, _, _ := setup(t)
-	for _, path := range []string{"/api/twins", "/api/sessions", "/api/memories", "/api/export", "/api/me"} {
+	for _, path := range []string{"/api/twins", "/api/sessions", "/api/memories", "/api/export", "/api/me", "/api/projects", "/api/tasks", "/api/decisions"} {
 		if w := perform(r, "GET", path, "", ""); w.Code != 401 {
 			t.Fatalf("%s: %d", path, w.Code)
 		}

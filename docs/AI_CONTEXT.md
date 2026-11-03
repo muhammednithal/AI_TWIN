@@ -1,42 +1,52 @@
-# AI context: Twin workspace
+# AI context: Twin decision workspace
 
-## Product
+## Product direction
 
-Twin is a private personal AI workspace: a place to think through ideas, draft in your own voice, and retain useful context. It is an AI companion, not an autonomous impersonation service. A user creates one or more twins with a name, language, purpose, tone controls, and writing samples. Each twin has its own curated memories and saved conversations.
+Twin is a **personal decision workspace**. The primary loop is remember → apply → review → decide → reflect. Projects organize durable context; tasks deliberately apply selected memories; the journal preserves choices, assumptions, and outcomes. Read `PRODUCT.md` for the complete user journey and feature boundaries.
 
-## Implemented on `prod`
+The original personality-based twin/chat experience remains available under `/companion`, `/twins`, `/chat`, and `/memory`. It is a separate workflow, not the context source for project tasks unless the user explicitly imports notes.
 
-- Email/password authentication, bcrypt password hashes, 12-hour issuer-bound HS256 JWTs, account-scoped resources, request limits.
-- Overview with real twin/session counts, recent conversations, and quick actions.
-- Multiple twins: create, edit, delete, search; three purpose presets; humor/formality/empathy controls; 1–10 writing samples.
-- Persistent conversations: history, title generation from the first message, rename/delete, Markdown replies, copy, Markdown download, mobile history selector.
-- Context retrieval: cosine ranking of the twin's samples and memories, top five context references, last 12 messages. References are visible as retrieved context, not claims of attribution.
-- Memories: explicit create/edit/delete, tags, per-twin browsing, text/tag search. Nothing is inferred and saved automatically.
-- Light/dark theme, responsive navigation, pending states, retry/error handling, account data export.
-- Additive schema migration command, container definitions, CI, tests, and package-specific agent guides.
+## Implemented
+
+- Authenticated, account-scoped projects with purpose, standing instructions, and archive/restore.
+- Typed project memories: fact, preference, research, instruction, decision. Source text, tags, version, pin, archive, review date, optional source-task provenance.
+- Copy-only import of selected owned twin memories. Deterministic destination IDs make repeat imports safe; existing project copies are not overwritten.
+- Explicit task context selection plus all active pinned notes and standing instructions, with a 30-memory hard bound. Project notes are stored without embedding/model calls.
+- Signed, deterministic context preview; no task generation without a matching preview token. A post-generation transaction verifies the context again before saving.
+- Analyze/compare/plan/draft tasks, reusable starting prompts, immutable result/input snapshots, persistent history, copy/Markdown/context-pack exports.
+- Task review statuses and notes; explicit promotion of a reviewed/edited output excerpt to memory.
+- Decision journal: choice, reasoning, assumptions, outcome, review date, status, and optional supporting task.
+- Version-2 account export includes all project/task/journal data as well as legacy twin data.
+- Legacy twin CRUD, style embeddings, memory management, and persistent chat remain intact.
 
 ## Source map
 
 | Concern | Start here |
 | --- | --- |
-| Routing, providers, theme | `ai-twin-frontend/src/app/App.tsx` |
-| Navigation | `ai-twin-frontend/src/app/Shell.tsx` |
-| Browser/API boundary | `ai-twin-frontend/src/lib/api.ts` and `types.ts` |
-| UI screens | `ai-twin-frontend/src/features/<feature>/` |
-| Design tokens and responsive rules | `ai-twin-frontend/src/styles/tokens.css`, `responsive.css`; `global.css` imports the feature styles |
-| Backend composition / migration | `backend/cmd/server/main.go` |
-| HTTP contracts / middleware | `backend/internal/workspace/api.go` |
-| Models / table compatibility | `backend/internal/workspace/models.go` |
-| Chat retrieval and persistence | `backend/internal/workspace/chat.go` |
+| Product journey and limits | `docs/PRODUCT.md` |
+| App routes/providers | `ai-twin-frontend/src/app/App.tsx` |
+| Project/task contracts and query hooks | `ai-twin-frontend/src/lib/workbench-types.ts`, `workbench.ts` |
+| HTTP/auth boundary | `ai-twin-frontend/src/lib/api.ts` |
+| Projects, library, import | `ai-twin-frontend/src/features/projects/` |
+| Context preview/results/reviews | `ai-twin-frontend/src/features/tasks/` |
+| Journal | `ai-twin-frontend/src/features/decisions/` |
+| Project domain/persistence | `backend/internal/workspace/projects.go`, `project_memory.go`, `project_import.go` |
+| Context contract | `backend/internal/workspace/task_context.go` |
+| Task execution/idempotency | `backend/internal/workspace/tasks.go` |
+| Journal | `backend/internal/workspace/decisions.go` |
+| Real PostgreSQL integration suite | `backend/internal/workspace/project_integration_test.go` |
 | Gemini transport | `backend/internal/platform/ai/gemini.go` |
-| Environment validation | `backend/internal/platform/settings/settings.go` |
 
-## Boundaries and limitations
+## Invariants
 
-No email verification, password recovery, refresh tokens, billing, file ingestion, voice, tools, autonomous actions, streaming, vector database, or automatic memory extraction. Token sign-out clears this tab; it does not revoke an already issued token. Production uses HTTPS at an external reverse proxy. Rate limiting and request deduplication are in-process and require shared infrastructure before multiple API replicas. The conversation index currently returns the latest 200 sessions; workspace export includes all conversations. Search filters loaded records. Retrieval scans the selected twin's vectors in memory.
+Every private query is account-scoped, directly or through an owned project/twin. Project child writes lock the parent first. Network generation happens outside database locks. Context tokens cover the task objective/type, project brief/instructions, and exact included memory versions/content/provenance. A changed context must be previewed again. Persisted results and input snapshots are immutable; only review state/notes change.
 
-Existing databases require backup and migration rehearsal. The restructure changes API routes and memory JSON casing; old clients must be upgraded together. Live Gemini behavior and real database migration need separate integration verification. Consult `docs/ROADMAP.md` for planned improvements rather than describing them as shipped.
+Task request IDs are supplied by the client and unique in storage. A retry with the same ID/payload returns its saved result. A reused ID for a different task is rejected. The in-process overlap guard reduces duplicate work; multiple replicas may still generate concurrently before the database uniqueness constraint resolves the final write. Preview tokens are not authentication tokens.
 
-## Documentation order
+Never silently turn a conversation/result into project memory. Import and promotion require explicit user action. Review dates only flag freshness; they do not verify or refresh information. Do not claim autonomous actions, live research, verified market data, deterministic conflict detection, file ingestion, reminders, or context-pack import.
 
-`AGENTS.md` → this file → `ARCHITECTURE.md` → package guide → `API.md` / `DEVELOPMENT.md`. For releases, read `MIGRATION.md` and `DEPLOYMENT.md`.
+## Verification and rollout
+
+Use `go run ./cmd/server -migrate` only against the intended backed-up development/staging database. The additive schema introduces `projects`, `project_memories`, `task_runs`, and `decisions`; legacy tables remain. Normal startup does not migrate.
+
+Go unit/SQL-mock tests cover context selection, ownership, token changes, and task retries. The real PostgreSQL suite requires `TWIN_TEST_DATABASE_URL` pointing to an explicitly local `*_test` database; it creates and removes only its random schema. GitHub CI provisions that database. A locally skipped integration test is not a pass. Keep `VERIFICATION.md` honest about actual runs.

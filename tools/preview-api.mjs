@@ -1,6 +1,8 @@
 /** Disposable local UI fixtures. Never used by the Go API or a production build. */
 import http from 'node:http';
 import { randomUUID } from 'node:crypto';
+import { createWorkbenchFixtures } from './preview-workbench.mjs';
+const workbench = createWorkbenchFixtures();
 const timestamp = () => new Date().toISOString();
 const user = { id: randomUUID(), display_name: 'Alex Morgan', email: 'alex@example.test' };
 let twins = [
@@ -22,7 +24,8 @@ const server = http.createServer(async (req, res) => {
   if (req.headers.authorization !== 'Bearer disposable-preview-token') return send({ error: 'Fixture session expired. Sign in with any test email and password.' }, 401);
   const resourceId = url.pathname.split('/')[3];
   if (url.pathname === '/api/me') return send({ user });
-  if (url.pathname === '/api/export') return send({ version: 1, user, twins, sessions, memories });
+  if (url.pathname === '/api/export') return send({ version: 2, user, twins, sessions, memories, ...workbench.export() });
+  if (workbench.handle(req, url, input, send, { twins, memories })) return;
   if (url.pathname === '/api/chat') {
     if (input.message.includes('[fail]')) return send({ error: 'Simulated provider failure.' }, 502);
     let session = sessions.find(s => s.id === input.session_id);
@@ -50,4 +53,5 @@ const server = http.createServer(async (req, res) => {
   }
   return send({ error: 'Fixture route not found.' }, 404);
 });
-server.listen(8081, '127.0.0.1', () => console.log('Disposable fixture API: http://127.0.0.1:8081 — no database or AI calls.'));
+const port = Number(process.env.PREVIEW_API_PORT || 8081);
+server.listen(port, '127.0.0.1', () => console.log(`Disposable fixture API: http://127.0.0.1:${port} — no database or AI calls.`));

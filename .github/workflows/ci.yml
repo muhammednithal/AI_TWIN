@@ -26,6 +26,19 @@ jobs:
       - run: npm audit --omit=dev --audit-level=high
   backend:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: twin_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: disposable-test-password
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres -d twin_test"
+          --health-interval 5s --health-timeout 3s --health-retries 15
+    env:
+      TWIN_TEST_DATABASE_URL: postgres://postgres:disposable-test-password@localhost:5432/twin_test?sslmode=disable
     defaults:
       run:
         working-directory: backend

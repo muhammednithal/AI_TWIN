@@ -1,0 +1,461 @@
+.task-workspace {
+  display: grid;
+  grid-template-columns: 205px minmax(0, 1fr);
+  gap: 25px;
+  align-items: start;
+}
+.task-history {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 17px 12px;
+  max-height: 750px;
+  overflow-y: auto;
+  position: sticky;
+  top: 20px;
+}
+.task-history > .eyebrow {
+  font-size: 9px;
+  margin: 2px 5px 16px;
+}
+.task-history > button {
+  display: block;
+  width: 100%;
+  padding: 13px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  text-align: left;
+  color: var(--ink);
+  margin-bottom: 5px;
+}
+.task-history > button:hover,
+.task-history > button.active {
+  background: var(--soft);
+  border-color: var(--line);
+}
+.task-history strong {
+  font-size: 11px;
+  line-height: 1.7;
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.task-history small {
+  display: block;
+  font-size: 9px;
+  color: var(--muted);
+  margin-top: 7px;
+  text-transform: capitalize;
+}
+.task-history > p {
+  font-size: 11px;
+  padding: 5px;
+  color: var(--muted);
+}
+.task-main {
+  min-width: 0;
+}
+.task-brief {
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 25px;
+}
+.task-brief > .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+}
+.task-brief > .MuiTextField-root:nth-child(2) {
+  max-width: 220px;
+}
+.task-brief > .use-template {
+  align-self: flex-start;
+  gap: 10px;
+  padding: 0;
+  font-size: 11px;
+}
+.context-picker {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 13px;
+  padding: 23px;
+  margin-top: 23px;
+}
+.context-picker h3 {
+  font-size: 16px;
+  letter-spacing: -0.3px;
+}
+.context-picker .section-description {
+  font-size: 11px;
+}
+.context-picker .section-heading {
+  margin-bottom: 13px;
+}
+.context-pick {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  border-top: 1px solid var(--line);
+  padding: 17px 0;
+  cursor: pointer;
+}
+.context-pick:last-child {
+  padding-bottom: 0;
+}
+.context-pick > .MuiCheckbox-root {
+  padding: 2px;
+  margin-top: 1px;
+}
+.context-pick > div {
+  flex: 1;
+  min-width: 0;
+}
+.context-pick strong {
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 1.7;
+}
+.context-pick p {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 6px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.context-pick small {
+  font-size: 10px;
+  color: var(--muted);
+}
+.context-pick > svg {
+  margin-top: 5px;
+  color: var(--green);
+  flex-shrink: 0;
+}
+.task-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 23px 0;
+}
+.task-controls .MuiButton-root {
+  font-size: 12px;
+}
+.context-panel {
+  background: var(--surface);
+  border: 1px solid #a0b19a;
+  border-radius: 14px;
+  padding: 25px;
+  margin: 25px 0;
+}
+.context-panel .section-heading {
+  align-items: flex-start;
+}
+.context-panel .section-heading .MuiButton-root {
+  font-size: 10px;
+  white-space: nowrap;
+  padding: 4px 8px;
+}
+.context-panel h2 {
+  font-size: 19px;
+}
+.context-purpose {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.9;
+  white-space: pre-wrap;
+}
+.context-objective {
+  font-size: 13px;
+  margin: 20px 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.context-objective strong {
+  font-size: 11px;
+  text-transform: capitalize;
+}
+.context-panel .MuiAlert-root {
+  font-size: 11px;
+}
+.context-memory {
+  border-top: 1px solid var(--line);
+  padding: 16px 0;
+}
+.context-memory:last-child {
+  padding-bottom: 0;
+}
+.context-memory summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  list-style: none;
+}
+.context-memory summary::before {
+  content: '+';
+  color: var(--muted);
+  font-size: 15px;
+}
+.context-memory[open] summary::before {
+  content: '−';
+}
+.context-label {
+  font-size: 9px;
+  padding: 4px 5px;
+  background: var(--soft);
+  border-radius: 4px;
+  color: var(--green);
+  font-weight: 600;
+}
+.context-memory summary strong {
+  font-weight: 550;
+  flex: 1;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.context-reason {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.context-memory > div {
+  padding: 15px 8px 0 27px;
+}
+.context-memory .MuiChip-root {
+  font-size: 9px;
+  height: 22px;
+}
+.context-memory > div > p {
+  font-size: 12px;
+  line-height: 1.9;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 12px 0;
+}
+.context-memory > div > small {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 7px;
+  overflow-wrap: anywhere;
+}
+.context-disclosure {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.9;
+  margin-top: 20px;
+}
+.task-result {
+  min-width: 0;
+}
+.task-result-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+.task-result-heading h2 {
+  font-size: 23px;
+  line-height: 1.5;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.task-result-heading > .MuiChip-root {
+  flex-shrink: 0;
+  font-size: 10px;
+  text-transform: capitalize;
+}
+.task-result > .MuiAlert-root {
+  font-size: 12px;
+}
+.result-document {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 28px;
+  margin: 23px 0;
+}
+.result-document .markdown {
+  font-size: 14px;
+  line-height: 1.95;
+}
+.result-document .markdown h2 {
+  font-size: 19px;
+  margin-top: 26px;
+}
+.result-document .markdown p {
+  margin-bottom: 16px;
+}
+.result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  justify-content: flex-end;
+}
+.result-actions .MuiButton-root {
+  font-size: 10px;
+  padding: 7px 10px;
+}
+.task-review {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 25px 0;
+}
+.task-review h3 {
+  font-size: 16px;
+}
+.review-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 21px;
+  margin: 23px 0;
+}
+.review-fields > .MuiTextField-root:first-child {
+  max-width: 230px;
+}
+.task-review > .MuiButton-root {
+  font-size: 12px;
+}
+.task-review > .MuiAlert-root {
+  margin-bottom: 15px;
+}
+.task-main > .MuiAlert-root {
+  margin-top: 17px;
+}
+@media (max-width: 1200px) {
+  .task-workspace {
+    grid-template-columns: 175px minmax(0, 1fr);
+    gap: 17px;
+  }
+  .task-brief,
+  .context-picker,
+  .context-panel {
+    padding: 20px;
+  }
+  .context-memory summary {
+    flex-wrap: wrap;
+  }
+  .context-reason {
+    margin-left: auto;
+  }
+  .task-result-heading {
+    flex-direction: column;
+  }
+}
+@media (max-width: 950px) {
+  .task-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .task-history {
+    position: static;
+    max-height: 220px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 16px;
+  }
+  .task-history > .eyebrow {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+  .task-history > button {
+    flex: 1;
+    min-width: 150px;
+    max-width: 240px;
+    border-color: var(--line);
+    margin: 0;
+  }
+  .task-history > p {
+    margin: 0;
+    font-size: 11px;
+  }
+  .task-history strong {
+    font-size: 10px;
+  }
+  .context-panel {
+    margin-top: 25px;
+  }
+  .context-panel .section-heading {
+    gap: 12px;
+  }
+}
+@media (max-width: 760px) {
+  .task-brief,
+  .context-picker,
+  .context-panel,
+  .task-review {
+    padding: 18px;
+  }
+  .task-controls {
+    gap: 9px;
+  }
+  .task-controls .MuiButton-root {
+    font-size: 11px;
+    padding: 10px 12px;
+  }
+  .task-result-heading h2 {
+    font-size: 21px;
+  }
+  .result-document {
+    padding: 20px;
+  }
+  .result-document .markdown {
+    font-size: 13px;
+  }
+  .context-panel h2 {
+    font-size: 17px;
+  }
+  .context-panel .section-heading {
+    flex-wrap: wrap;
+  }
+  .context-memory summary strong {
+    font-size: 11px;
+  }
+  .context-reason {
+    width: 100%;
+    padding-left: 29px;
+  }
+  .context-picker .section-heading {
+    flex-direction: row;
+  }
+  .context-disclosure {
+    font-size: 10px;
+  }
+  .context-pick p {
+    font-size: 11px;
+  }
+  .result-actions {
+    justify-content: flex-start;
+  }
+  .task-history {
+    max-height: 180px;
+  }
+  .task-history > button {
+    min-width: 140px;
+    max-width: none;
+  }
+  .task-result .MuiAlert-root {
+    font-size: 11px;
+  }
+}
